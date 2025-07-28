@@ -3,40 +3,101 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Restaurant Menu</title>
+  <title>My Grill Restaurant</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      padding: 0;
-      background-color: #f5f5f5;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff7f0;
       color: #333;
     }
-    h1 {
-      color: #007bff;
+    header {
+      background-color: #ff5722;
+      color: white;
+      padding: 20px;
+      text-align: center;
       font-size: 24px;
-      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
-    p {
-      font-size: 18px;
-      text-align: center;
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 20px;
     }
-    .menu {
-      max-width: 400px;
-      margin: 20px auto;
-      padding: 10px;
-      background: white;
-      border-radius: 8px;
+    .grid-item {
+      background-color: white;
+      border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 10px;
+      transition: transform 0.2s;
+    }
+    .grid-item:hover {
+      transform: scale(1.03);
+      cursor: pointer;
+    }
+    .grid-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .food-name {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .menu-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .menu-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="menu">
-    <h1>Welcome to My Restaurant!</h1>
-    <p>This website is mobile-friendly and hosted for free.</p>
-    <p>Scan QR code to access this menu anytime.</p>
+
+  <header>My Grill Restaurant</header>
+
+  <div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="showMenu('https://your-link-to-pizza-menu-image.jpg')">
+      <img src="https://via.placeholder.com/200x120?text=Pizza" alt="Pizza">
+      <div class="food-name">Pizza</div>
+    </div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="showMenu('https://your-link-to-burger-menu-image.jpg')">
+      <img src="https://via.placeholder.com/200x120?text=Burger" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
   </div>
+
+  <!-- Modal for Menu Image -->
+  <div class="menu-modal" id="menuModal" onclick="hideMenu()">
+    <img id="menuImage" src="" alt="Menu">
+  </div>
+
+  <script>
+    function showMenu(link) {
+      document.getElementById('menuImage').src = link;
+      document.getElementById('menuModal').style.display = 'flex';
+    }
+    function hideMenu() {
+      document.getElementById('menuModal').style.display = 'none';
+    }
+  </script>
+
 </body>
 </html>
-
