@@ -89,15 +89,12 @@
     <img id="menuImage" src="" alt="Menu">
   </div>
 
-  <script>
-    function showMenu(link) {
-      document.getElementById('menuImage').src = link;
-      document.getElementById('menuModal').style.display = 'flex';
-    }
-    function hideMenu() {
-      document.getElementById('menuModal').style.display = 'none';
-    }
-  </script>
+  
+<script>
+  function openMenu(link) {
+    window.location.href = `menu.html?img=${encodeURIComponent(link)}`;
+  }
+</script>
 
 </body>
 </html>
