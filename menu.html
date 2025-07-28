@@ -3,48 +3,171 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu View</title>
+  <title>My Grill Restaurant</title>
   <style>
     body {
       margin: 0;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff7f0;
+      color: #333;
     }
-    img {
-      max-width: 90%;
-      max-height: 90vh;
-      border-radius: 10px;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #ff5722;
+    header {
+      background-color: #ff5722;
       color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 20px;
+    }
+    .grid-item {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 5px;
+      transition: transform 0.2s;
+    }
+    .grid-item:hover {
+      transform: scale(1.03);
+      cursor: pointer;
+    }
+    .grid-item img {
+      width: 80px;
+      height: 80px;
+     // object-fit: cover;
+      border-radius: 8px;
+    }
+    .food-name {
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .menu-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .menu-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
 
-  <img id="menuImg" src="" alt="Menu Image">
-  <button onclick="goBack()">Back</button>
+  <header>My Grill Restaurant</header>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const imgLink = params.get('img');
-    document.getElementById('menuImg').src = imgLink;
+  <div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+  <div class="food-name">Pizza</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+  <div class="food-name">Pizza</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+  <div class="food-name">Pizza</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+  <div class="food-name">Pizza</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+  <div class="food-name">Pizza</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+  <div class="food-name">Pizza</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+  <div class="food-name">Pizza</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
 
-    function goBack() {
-      window.history.back();
-    }
-  </script>
+  
+<script>
+  function openMenu(link) {
+    window.location.href = `menu.html?img=${encodeURIComponent(link)}`;
+  }
+</script>
 
 </body>
 </html>
