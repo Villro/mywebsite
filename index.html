@@ -40,7 +40,7 @@
     const db = getDatabase(app);
 
     // Set your UserId (can be dynamic later)
-    const userId = "User"; // Replace with actual userId
+    const userId = "Usid"; // Replace with actual userId
 
     window.checkCode = async function() {
       const codeInput = document.getElementById("codeInput").value.trim();
@@ -57,7 +57,8 @@
         if (snapshot.exists()) {
           snapshot.forEach(childSnap => {
             const data = childSnap.val();
-            if (data.code === codeInput) {
+            const savedCode = data.code.toString(); // Convert Firebase number to string
+            if (savedCode === codeInput) {
               const restaurantName = data.restaurant;
               if (restaurantName) {
                 window.location.href = `${restaurantName}.html`;
@@ -94,5 +95,6 @@
 
 </body>
 </html>
+
 
 
