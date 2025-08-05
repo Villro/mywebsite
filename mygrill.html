@@ -137,7 +137,7 @@
   const params = new URLSearchParams(window.location.search);
   const fooklink = params.get('fook');
 
-  if (fooklink !== null) {
+  if (fooklink === 'show') {
     showToast("data have");
   } else {
     showToast("no");
