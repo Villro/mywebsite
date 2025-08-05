@@ -133,6 +133,21 @@
   function openMenu(link) {
     window.location.href = `menu.html?img=${encodeURIComponent(link)}`;
   }
+  const params = new URLSearchParams(window.location.search);
+  const fooklink = params.get('fook');
+  if(fooklonl!=null){
+    showToast("data have");
+  }else{
+        showToast("no");
+  }
+  function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.style.display = "block";
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 3000);
+    }
 </script>
 
 </body>
