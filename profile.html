@@ -69,9 +69,11 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('id');
 
     // Hardcoded ID 22333 - replace if dynamic
-    const docRef = doc(db, "Kid", "22333");
+    const docRef = doc(db, "Kid", userId);
 
     async function loadUserData() {
       try {
