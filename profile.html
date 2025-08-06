@@ -70,17 +70,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const params = new URLSearchParams(window.location.search);
-    const userId = params.get('id');
+    const userIds = params.get('id');
 
     // Hardcoded ID 22333 - replace if dynamic
-    const docRef = doc(db, "Kid", userId);
+    const docRef = doc(db, "Kid", userIds);
 
-    function goBack() {
-      const params = new URLSearchParams(window.location.search);
-      const rsid = params.get('rest');
-      const userId = params.get('id');
-      window.location.href = `${rsid}.html?fook=${userId}`;
-    }
+ 
 
     async function loadUserData() {
       try {
