@@ -9,7 +9,19 @@
     h1 { color: #ff5722; }
     input { padding: 10px; font-size: 18px; width: 200px; margin: 10px; text-align: center; }
     button { padding: 10px 20px; font-size: 18px; background: #ff5722; color: white; border: none; border-radius: 5px; }
-    .toast { position: fixed; bottom: 20px; background: #333; color: white; padding: 10px 20px; border-radius: 5px; opacity: 0.9; display: none; }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      opacity: 0.9;
+      display: none;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
@@ -20,27 +32,25 @@
 
   <div id="toast" class="toast"></div>
 
-  <!-- Firebase SDK with Your Config -->
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+    import { getFirestore, collection, doc, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
-      authDomain: "villroconnection.firebaseapp.com",
-      databaseURL: "https://villroconnection.firebaseio.com",
-      projectId: "villroconnection",
-      storageBucket: "villroconnection.appspot.com",
-      messagingSenderId: "672876428963",
-      appId: "1:672876428963:web:00cd0cc83b1e3a17760916",
-      measurementId: "G-7C09TXDJGR"
+      apiKey: "AIzaSyApKZcE9n07a5ct8abRcNGj0sw0h1G9fwY",
+      authDomain: "myvillro.firebaseapp.com",
+      projectId: "myvillro",
+      storageBucket: "myvillro.firebasestorage.app",
+      messagingSenderId: "277825963335",
+      appId: "1:277825963335:web:c7b3dcfdf7be337cba7862",
+      measurementId: "G-86BMPBED29"
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    const db = getFirestore(app);
 
-    // Set your UserId (can be dynamic later)
-    const userId = "Usid"; // Replace with actual userId
+    const userId = "Usid"; // Replace with actual userId if needed
 
     window.checkCode = async function() {
       const codeInput = document.getElementById("codeInput").value.trim();
@@ -50,38 +60,33 @@
       }
 
       try {
-        const userRef = ref(db, userId);
-        const snapshot = await get(userRef);
+        const subCollectionRef = collection(db, "datas", userId); // datas > Usid > subDocs
+        const snapshot = await getDocs(subCollectionRef);
+
         let found = false;
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          const savedCode = data.code?.toString();
+          const restaurant = data.restaurant;
 
-        if (snapshot.exists()) {
-          snapshot.forEach(childSnap => {
-            const data = childSnap.val();
-            const savedCode = data.code.toString(); // Convert Firebase number to string
-            if (savedCode === codeInput) {
-              const restaurantName = data.restaurant;
-              if (restaurantName) {
-              window.location.href = `${restaurantName}.html?fook=show`;
-// This creates fook=show → GOOD
-
-              } else {
-                showToast("Restaurant name missing");
-              }
-              found = true;
-              return true; // stop loop
+          if (savedCode === codeInput) {
+            if (restaurant) {
+              window.location.href = `${restaurant}.html?fook=show`;
+            } else {
+              showToast("Restaurant name missing");
             }
-          });
-
-          if (!found) {
-            showToast("Invalid code");
+            found = true;
+            return;
           }
-        } else {
-          showToast("No data found");
+        });
+
+        if (!found) {
+          showToast("Invalid code");
         }
 
       } catch (error) {
-        console.error("Database error:", error);
-        showToast("Error accessing database");
+        console.error("Firestore error:", error);
+        showToast("Error accessing Firestore");
       }
     };
 
@@ -97,8 +102,3 @@
 
 </body>
 </html>
-
-
-
-
-
