@@ -77,13 +77,30 @@
   display: none;
   z-index: 1000;
 }
+    button {
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #e64a19;
+}
 
   </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
 
-  <header>My Grill Restaurant</header>
+  <header>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span>My Grill Restaurant</span>
+    <button onclick="goToNextPage()">Go to Next Page</button>
+  </div>
+</header>
   
 <div class="restaurant-img">
     <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="280px" gravity height="98px" padding="4px"/></p>
@@ -157,6 +174,12 @@
   } else {
     showToast("no");
   }
+  function goToNextPage() {
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('fook');
+      window.location.href = `profile.html?id=${userId}`;
+}
+
 
   function showToast(message) {
     const toast = document.getElementById("toast");
