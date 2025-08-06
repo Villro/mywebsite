@@ -43,14 +43,14 @@
   </style>
 </head>
 <body>
-
+    
   <div class="card">
     <h2>User Information</h2>
     <p><strong>Username:</strong> <span id="username">Loading...</span></p>
     <p><strong>Contact ID:</strong> <span id="contact">Loading...</span></p>
     <p><strong>Points:</strong> <span id="points">Loading...</span></p>
     <p><strong>Restaurant:</strong> <span id="restaurant">Loading...</span></p>
-    <button onclick="window.location.href='index.html'">Go Back</button>
+    <button onclick="goBack">Go Back</button>
   </div>
 
   <script type="module">
@@ -74,6 +74,13 @@
 
     // Hardcoded ID 22333 - replace if dynamic
     const docRef = doc(db, "Kid", userId);
+
+    function goBack() {
+      const params = new URLSearchParams(window.location.search);
+      const rsid = params.get('rest');
+      const userId = params.get('id');
+      window.location.href = `${rsid}.html?fook=${userId}`;
+    }
 
     async function loadUserData() {
       try {
