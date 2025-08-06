@@ -71,7 +71,7 @@
 
           if (savedCode === codeInput) {
             if (restaurant) {
-              window.location.href = `${restaurant}.html?fook=show`;
+              window.location.href = `${restaurant}.html?fook=${savedCode}`;
             } else {
               showToast("Restaurant name missing");
             }
@@ -102,4 +102,5 @@
 
 </body>
 </html>
+
 
