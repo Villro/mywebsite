@@ -60,7 +60,7 @@
       }
 
       try {
-        const subCollectionRef = collection(db, "datas", userId); // datas > Usid > subDocs
+        const subCollectionRef = collection(db, userId); // datas > Usid > subDocs
         const snapshot = await getDocs(subCollectionRef);
 
         let found = false;
@@ -102,3 +102,4 @@
 
 </body>
 </html>
+
