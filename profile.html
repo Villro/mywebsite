@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Info Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #ffecd2, #fcb69f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      text-align: center;
+    }
+    .card h2 {
+      margin-bottom: 10px;
+      color: #ff5722;
+    }
+    .card p {
+      margin: 6px 0;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>User Information</h2>
+    <p><strong>Username:</strong> <span id="username">Loading...</span></p>
+    <p><strong>Contact ID:</strong> <span id="contact">Loading...</span></p>
+    <p><strong>Points:</strong> <span id="points">Loading...</span></p>
+    <p><strong>Restaurant:</strong> <span id="restaurant">Loading...</span></p>
+    <button onclick="window.location.href='index.html'">Go Back</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyApKZcE9n07a5ct8abRcNGj0sw0h1G9fwY",
+      authDomain: "myvillro.firebaseapp.com",
+      projectId: "myvillro",
+      storageBucket: "myvillro.firebasestorage.app",
+      messagingSenderId: "277825963335",
+      appId: "1:277825963335:web:c7b3dcfdf7be337cba7862",
+      measurementId: "G-86BMPBED29"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Hardcoded ID 22333 - replace if dynamic
+    const docRef = doc(db, "Kid", "22333");
+
+    async function loadUserData() {
+      try {
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          document.getElementById('username').textContent = data.username || 'N/A';
+          document.getElementById('contact').textContent = data.contactid || 'N/A';
+          document.getElementById('points').textContent = data.points || '0';
+          document.getElementById('restaurant').textContent = data.restaurant || 'N/A';
+        } else {
+          document.getElementById('username').textContent = 'No data';
+          document.getElementById('contact').textContent = '-';
+          document.getElementById('points').textContent = '-';
+          document.getElementById('restaurant').textContent = '-';
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    loadUserData();
+  </script>
+</body>
+</html>
