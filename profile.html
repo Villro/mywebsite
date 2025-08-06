@@ -52,14 +52,19 @@
     <p><strong>Restaurant:</strong> <span id="restaurant">Loading...</span></p>
     <button onclick="goBack()">Go Back</button>
   </div>
+<script>
+  // Define globally so it works with onclick
+  function goBack() {
+    const params = new URLSearchParams(window.location.search);
+    const rsid = params.get('rest');
+    const userIds = params.get('id');
+    window.location.href = `${rsid}.html?fook=${userIds}`;
+  }
+</script>
 
   <script type="module">
      const params = new URLSearchParams(window.location.search);
-      const rsid = params.get('rest');
-      const userIds = params.get('id');
-      function goBack() {
-      window.location.href = `${rsid}.html?fook=${userIds}`;
-    }
+    const userIds = params.get('id');
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
