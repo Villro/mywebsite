@@ -43,28 +43,16 @@
   </style>
 </head>
 <body>
-    
   <div class="card">
     <h2>User Information</h2>
     <p><strong>Username:</strong> <span id="username">Loading...</span></p>
     <p><strong>Contact ID:</strong> <span id="contact">Loading...</span></p>
     <p><strong>Points:</strong> <span id="points">Loading...</span></p>
     <p><strong>Restaurant:</strong> <span id="restaurant">Loading...</span></p>
-    <button onclick="goBack()">Go Back</button>
+    <button id="backBtn">Go Back</button>
   </div>
-<script>
-  // Define globally so it works with onclick
-  function goBack() {
-    const params = new URLSearchParams(window.location.search);
-    const rsid = params.get('rest');
-    const userIds = params.get('id');
-    window.location.href = `${rsid}.html?fook=${userIds}`;
-  }
-</script>
 
   <script type="module">
-     const params = new URLSearchParams(window.location.search);
-    const userIds = params.get('id');
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
@@ -80,11 +68,12 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    
-    // Hardcoded ID 22333 - replace if dynamic
-    const docRef = doc(db, "Kid", userIds);
 
- 
+    const params = new URLSearchParams(window.location.search);
+    const userIds = params.get('id');
+    const rsid = params.get('rest');
+
+    const docRef = doc(db, "Kid", userIds);
 
     async function loadUserData() {
       try {
@@ -105,6 +94,15 @@
         console.error("Error fetching data:", error);
       }
     }
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      // Ensure rsid is valid and userIds is available
+      if (rsid && userIds) {
+        window.location.href = `${rsid}.html?fook=${userIds}`;
+      } else {
+        alert("Missing navigation parameters.");
+      }
+    });
 
     loadUserData();
   </script>
