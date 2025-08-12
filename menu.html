@@ -4,21 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu View</title>
+
+  <!-- Google Font for Stylish Heading -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
   <style>
     /* Background animation */
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       font-family: 'Segoe UI', Tahoma, sans-serif;
       background: linear-gradient(-45deg, #fff, #fad0c4, #fff, #ffdde1);
       background-size: 400% 400%;
       animation: gradientBG 12s ease infinite;
       color: #fff;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto; /* Enable vertical scroll */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     @keyframes gradientBG {
@@ -29,11 +36,13 @@
 
     /* Heading */
     h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.5rem;
+      margin: 10px 0 20px;
       text-align: center;
-      color: blue;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      color: #ff5722;
+      letter-spacing: 2px;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.2);
       animation: fadeInDown 1s ease forwards;
     }
 
@@ -44,8 +53,8 @@
 
     /* Image */
     img {
-      max-width: 90%;
-      max-height: 70vh;
+      max-width: 100%;
+      height: auto;
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
       opacity: 0;
@@ -59,7 +68,7 @@
 
     /* Button */
     button {
-      margin-top: 20px;
+      margin: 25px 0;
       padding: 12px 25px;
       background: linear-gradient(45deg, #ff512f, #dd2476);
       color: white;
