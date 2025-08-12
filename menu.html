@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      background: #fff;
+      background: #f7f7f7;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -15,11 +15,29 @@
       height: 100vh;
       font-family: Arial, sans-serif;
     }
-    img {
+
+    .image-container {
       max-width: 90%;
       max-height: 90vh;
-      border-radius: 10px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
+
+    .image-container.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -28,18 +46,35 @@
       border: none;
       border-radius: 5px;
       font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #e64a19;
     }
   </style>
 </head>
 <body>
 
-  <img id="menuImg" src="" alt="Menu Image">
+  <div class="image-container" id="imageCard">
+    <img id="menuImg" src="" alt="Menu Image">
+  </div>
   <button onclick="goBack()">Back</button>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const imgLink = params.get('img');
-    document.getElementById('menuImg').src = imgLink;
+    const imgElement = document.getElementById('menuImg');
+    const container = document.getElementById('imageCard');
+
+    // Preload image
+    const preload = new Image();
+    preload.src = imgLink;
+    preload.onload = () => {
+      imgElement.src = imgLink;
+      container.classList.add('show'); // Show with animation
+    };
 
     function goBack() {
       window.history.back();
