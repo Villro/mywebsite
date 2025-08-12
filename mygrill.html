@@ -20,6 +20,29 @@
       font-weight: bold;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
+    .circle-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 15px;
+  background: #fff;
+}
+
+.circle-container img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff5722;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.circle-container img:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
     .grid-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -102,6 +125,13 @@ button:hover {
   </div>
 </header>
   
+  <!-- Circle Image Row -->
+<div class="circle-container">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6" alt="Circle Image">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Circle Image">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fshake_img.png?alt=media&token=b4716a9a-9acd-4e51-8d49-06764addcbd8" alt="Circle Image">
+</div>
+
 <div class="restaurant-img" onclick="openCard()">
     <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="280px" gravity height="98px" padding="4px"/></p>
   </div>
