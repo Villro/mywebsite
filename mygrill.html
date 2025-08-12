@@ -98,7 +98,7 @@ button:hover {
   <header>
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span>My Grill Restaurant</span>
-    <button onclick="goToNextPage()">Account</button>
+<button id="accountBtn" onclick="goToNextPage()">Account</button>
   </div>
 </header>
   
@@ -167,11 +167,12 @@ button:hover {
   }
 
   const params = new URLSearchParams(window.location.search);
-  const fooklink = params.get('fook');
+  const fooklink = params.get('done');
 
   if (fooklink === 'show') {
     showToast("data have");
   } else {
+        document.getElementById('accountBtn').style.display = 'none'; // Hide button
     showToast("no");
   }
   function goToNextPage() {
