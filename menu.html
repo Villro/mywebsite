@@ -5,76 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu View</title>
   <style>
+    /* Background animation */
     body {
       margin: 0;
-      background: #f7f7f7;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-    }
-
-    .image-container {
-      max-width: 90%;
-      max-height: 90vh;
-      border-radius: 15px;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #333;
       overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      opacity: 0;
-      transform: scale(0.95);
-      transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
-    .image-container.show {
-      opacity: 1;
-      transform: scale(1);
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
+    /* Heading */
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: white;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      animation: fadeInDown 1s ease forwards;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Image */
     img {
-      width: 100%;
-      height: auto;
-      display: block;
+      max-width: 90%;
+      max-height: 70vh;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards;
+      animation-delay: 0.5s;
     }
 
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Button */
     button {
       margin-top: 20px;
-      padding: 10px 20px;
-      background: #ff5722;
+      padding: 12px 25px;
+      background: linear-gradient(45deg, #ff512f, #dd2476);
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 25px;
       font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
     button:hover {
-      background: #e64a19;
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     }
   </style>
 </head>
 <body>
 
-  <div class="image-container" id="imageCard">
-    <img id="menuImg" src="" alt="Menu Image">
-  </div>
-  <button onclick="goBack()">Back</button>
+  <h1>🍽️ Our Delicious Menu</h1>
+  <img id="menuImg" src="" alt="Menu Image">
+  <button onclick="goBack()">⬅ Back</button>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const imgLink = params.get('img');
-    const imgElement = document.getElementById('menuImg');
-    const container = document.getElementById('imageCard');
-
-    // Preload image
-    const preload = new Image();
-    preload.src = imgLink;
-    preload.onload = () => {
-      imgElement.src = imgLink;
-      container.classList.add('show'); // Show with animation
-    };
+    document.getElementById('menuImg').src = imgLink;
 
     function goBack() {
       window.history.back();
