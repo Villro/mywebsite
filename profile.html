@@ -98,9 +98,11 @@
     document.getElementById('backBtn').addEventListener('click', () => {
       // Ensure rsid is valid and userIds is available
       if (rsid && userIds) {
-        window.location.href = `${rsid}.html?fook=${userIds}`;
+      //  window.location.href = `${rsid}.html?fook=${userIds}`;
+        window.history.back();
       } else {
         alert("Missing navigation parameters.");
+        window.history.back();
       }
     });
 
