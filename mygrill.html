@@ -131,11 +131,17 @@
 </header>
   
   <!-- Circle Image Row -->
-<div class="circle-container" onclick="openMenu2()">
-  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fzomato-app-logo-icon-hd-png-701751694968330repz0n4tud-modified.png?alt=media&token=f767c0e6-ecd7-450f-b8e7-a1e3a6245065">
-  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fswi.png?alt=media&token=8630e991-c779-42c1-a148-f7d75c765e92">
-  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fsoffer.png?alt=media&token=365032b4-daa5-440b-a845-1a3ebf72ba82" alt="Circle Image">
-</div>
+<div class="circle-container">
+    <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fzomato-app-logo-icon-hd-png-701751694968330repz0n4tud-modified.png?alt=media&token=f767c0e6-ecd7-450f-b8e7-a1e3a6245065" 
+         alt="Category A" onclick="goToCategory('A')">
+
+    <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fswi.png?alt=media&token=8630e991-c779-42c1-a148-f7d75c765e92" 
+         alt="Category B" onclick="goToCategory('B')">
+
+    <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fsoffer.png?alt=media&token=365032b4-daa5-440b-a845-1a3ebf72ba82" 
+         alt="Category C" onclick="goToCategory('C')">
+  </div>
+
 
 <div class="restaurant-img" onclick="openCard()">
     <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="280px" gravity height="98px" padding="4px"/></p>
@@ -200,9 +206,9 @@
   function openMenu(link) {
     window.location.href = `menu.html?img=${encodeURIComponent(link)}`;
   }
-  function openMenu2() {
-    window.location.href = `menu.html`;
-  }
+  function goToCategory(cat) {
+      window.location.href = "menu.html?category=" + cat;
+    }
   function openCard() {
     window.location.href = `card.html`;
   }
