@@ -29,6 +29,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       overflow: hidden;
       transition: transform 0.3s ease;
+      cursor: pointer;
     }
     .item:hover {
       transform: scale(1.05);
@@ -48,41 +49,91 @@
       font-size: 1rem;
       color: #777;
     }
+    /* Single item animated view */
+    .animated-view {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    .animated-view img {
+      width: 80%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: linear-gradient(45deg, #ff512f, #dd2476);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
-  <h1>Delicious Food Menu</h1>
-  <div class="menu" id="menuList"></div>
+
+  <div id="app">
+    <h1>Delicious Food Menu</h1>
+    <div class="menu" id="menuList"></div>
+  </div>
 
   <script>
-    // Menu Data (Placed Manually)
+    // Menu Data
     const menuData = [
-      { category: 'A', name: 'Grilled Chicken', description: 'Juicy and spicy grilled chicken', img: 'https://via.placeholder.com/250x160?text=Grilled+Chicken' },
-      { category: 'A', name: 'Paneer Tikka', description: 'Soft paneer cubes roasted to perfection', img: 'https://via.placeholder.com/250x160?text=Paneer+Tikka' },
-      { category: 'B', name: 'Veg Burger', description: 'Loaded with fresh veggies', img: 'https://via.placeholder.com/250x160?text=Veg+Burger' },
-      { category: 'B', name: 'Cheese Pizza', description: 'Extra cheese delight', img: 'https://via.placeholder.com/250x160?text=Cheese+Pizza' },
-      { category: 'C', name: 'Brownie', description: 'Chocolate fudge brownie', img: 'https://via.placeholder.com/250x160?text=Brownie' },
-      { category: 'C', name: 'Ice Cream Sundae', description: 'Sweet and creamy', img: 'https://via.placeholder.com/250x160?text=Ice+Cream+Sundae' }
+      { category: 'A', name: 'Grilled Chicken', description: 'Juicy and spicy grilled chicken', img: 'https://readdy.ai/api/search-image?query=Delicious' },
+      { category: 'A', name: 'Paneer Tikka', description: 'Soft paneer cubes roasted to perfection', img: 'https://readdy.ai/api/search-image?query=Perfectly' },
+      { category: 'B', name: 'Veg Burger', description: 'Loaded with fresh veggies', img: 'https://readdy.ai/api/search-image?query=Perfectly' },
+      { category: 'B', name: 'Cheese Pizza', description: 'Extra cheese delight', img: 'https://readdy.ai/api/search-image?query=Fresh' },
+      { category: 'C', name: 'Brownie', description: 'Chocolate fudge brownie', img: 'https://readdy.ai/api/search-image?query=Delicious' },
+      { category: 'C', name: 'Ice Cream Sundae', description: 'Sweet and creamy', img: 'https://readdy.ai/api/search-image?query=Perfectly' }
     ];
 
-    // Get category from URL
+    // Get URL params
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category');
+    const imgLink = params.get('img');
 
-    // Filter data based on category
-    const filteredMenu = menuData.filter(item => item.category === category);
-
-    // Show data
-    const menuList = document.getElementById('menuList');
-    filteredMenu.forEach(item => {
-      menuList.innerHTML += `
-        <div class="item">
-          <img src="${item.img}" alt="${item.name}">
-          <h3>${item.name}</h3>
-          <p>${item.description}</p>
+    // If img parameter exists → show single item view
+    if (imgLink) {
+      document.getElementById('app').innerHTML = `
+        <div class="animated-view">
+          <h1>🍽️ Our Delicious Menu</h1>
+          <img src="${imgLink}" alt="Menu Image">
+          <br>
+          <button onclick="window.history.back()">⬅ Back</button>
         </div>
       `;
-    });
+    } else {
+      // Show category-based menu
+      const filteredMenu = menuData.filter(item => item.category === category);
+      const menuList = document.getElementById('menuList');
+
+      filteredMenu.forEach(item => {
+        menuList.innerHTML += `
+          <div class="item" onclick="viewItem('${item.img}')">
+            <img src="${item.img}" alt="${item.name}">
+            <h3>${item.name}</h3>
+            <p>${item.description}</p>
+          </div>
+        `;
+      });
+    }
+
+    // Redirect to same page with img param
+    function viewItem(img) {
+      window.location.href = window.location.pathname + "?img=" + encodeURIComponent(img);
+    }
   </script>
 </body>
 </html>
