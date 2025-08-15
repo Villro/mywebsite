@@ -78,65 +78,68 @@
   </div>
 
   <script>
-    // Food items data with categories
-    const foodItems = [
-      { id: 1, category: 'A', name: "Margherita Pizza", image: "https://via.placeholder.com/400x300?text=Pizza", price: "$14.99", link: "#" },
-      { id: 2, category: 'A', name: "Grilled Salmon", image: "https://via.placeholder.com/400x300?text=Salmon", price: "$22.50", link: "#" },
-      { id: 3, category: 'B', name: "Caesar Salad", image: "https://via.placeholder.com/400x300?text=Salad", price: "$11.75", link: "#" },
-      { id: 4, category: 'B', name: "Beef Burger", image: "https://via.placeholder.com/400x300?text=Burger", price: "$16.25", link: "#" },
-      { id: 5, category: 'C', name: "Chicken Pasta", image: "https://via.placeholder.com/400x300?text=Pasta", price: "$18.00", link: "#" },
-      { id: 6, category: 'C', name: "Chocolate Cake", image: "https://via.placeholder.com/400x300?text=Cake", price: "$8.99", link: "#" }
-    ];
+  // Food items data with categories
+  const foodItems = [
+    { id: 1, category: 'A', name: "Margherita Pizza", image: "https://via.placeholder.com/400x300?text=Pizza", price: "$14.99", link: "#" },
+    { id: 2, category: 'A', name: "Grilled Salmon", image: "https://via.placeholder.com/400x300?text=Salmon", price: "$22.50", link: "#" },
+    { id: 3, category: 'B', name: "Caesar Salad", image: "https://via.placeholder.com/400x300?text=Salad", price: "$11.75", link: "#" },
+    { id: 4, category: 'B', name: "Beef Burger", image: "https://via.placeholder.com/400x300?text=Burger", price: "$16.25", link: "#" },
+    { id: 5, category: 'C', name: "Chicken Pasta", image: "https://via.placeholder.com/400x300?text=Pasta", price: "$18.00", link: "#" },
+    { id: 6, category: 'C', name: "Chocolate Cake", image: "https://via.placeholder.com/400x300?text=Cake", price: "$8.99", link: "#" }
+  ];
 
-    function generateStars() {
-      return `
-        <div class="flex items-center text-yellow-400">
-          <i class="ri-star-fill"></i>
-          <i class="ri-star-fill"></i>
-          <i class="ri-star-fill"></i>
-          <i class="ri-star-fill"></i>
-          <i class="ri-star-line"></i>
+  function generateStars() {
+    return `
+      <div class="flex items-center text-yellow-400">
+        <i class="ri-star-fill"></i>
+        <i class="ri-star-fill"></i>
+        <i class="ri-star-fill"></i>
+        <i class="ri-star-fill"></i>
+        <i class="ri-star-line"></i>
+      </div>
+    `;
+  }
+
+  function createFoodCard(item) {
+    return `
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-shadow transition-all duration-300">
+        <div class="relative h-56 overflow-hidden">
+          <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover object-top hover-scale transition-transform duration-300" />
         </div>
-      `;
-    }
-
-    function createFoodCard(item) {
-      return `
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-shadow transition-all duration-300">
-          <div class="relative h-56 overflow-hidden">
-            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover object-top hover-scale transition-transform duration-300" />
+        <div class="p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">${item.name}</h3>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xl font-bold text-green-600">${item.price}</span>
+            ${generateStars()}
           </div>
-          <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">${item.name}</h3>
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-xl font-bold text-green-600">${item.price}</span>
-              ${generateStars()}
-            </div>
-            <button onclick="window.open('${item.link}', '_blank')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-              <i class="ri-external-link-line"></i> View Details
-            </button>
-          </div>
+          <button onclick="window.open('${item.link}', '_blank')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+            <i class="ri-external-link-line"></i> View Details
+          </button>
         </div>
-      `;
-    }
+      </div>
+    `;
+  }
 
-    function displayFoodCards(category = null) {
-      const foodGrid = document.getElementById('foodGrid');
-      let filteredItems = category ? foodItems.filter(item => item.category === category) : foodItems;
-      foodGrid.innerHTML = filteredItems.map(item => createFoodCard(item)).join('');
-    }
-const params = new URLSearchParams(window.location.search);
-  const fooklink = params.get('done');
-    if(fooklink != null){
-      displayFoodCards(fooklink);
-    }
-    function filterCategory(cat) {
-      displayFoodCards(cat);
-    }
+  function displayFoodCards(category = null) {
+    const foodGrid = document.getElementById('foodGrid');
+    let filteredItems = category ? foodItems.filter(item => item.category === category) : foodItems;
+    foodGrid.innerHTML = filteredItems.map(item => createFoodCard(item)).join('');
+  }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      displayFoodCards(); // Show all initially
-    });
-  </script>
+  function filterCategory(cat) {
+    displayFoodCards(cat);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const foodLink = params.get('done'); // read ?done=A
+    if (foodLink) {
+      displayFoodCards(foodLink); // load filtered category
+    } else {
+      displayFoodCards(); // load all
+    }
+  });
+</script>
+
 </body>
 </html>
