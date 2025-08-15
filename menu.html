@@ -125,7 +125,11 @@
       let filteredItems = category ? foodItems.filter(item => item.category === category) : foodItems;
       foodGrid.innerHTML = filteredItems.map(item => createFoodCard(item)).join('');
     }
-
+const params = new URLSearchParams(window.location.search);
+  const fooklink = params.get('done');
+    if(fooklink != null){
+      displayFoodCards(fooklink);
+    }
     function filterCategory(cat) {
       displayFoodCards(cat);
     }
