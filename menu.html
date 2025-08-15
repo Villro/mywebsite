@@ -32,18 +32,22 @@
       flex-wrap: wrap;
     }
     .circle-container img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid white;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    .circle-container img:hover {
-      transform: scale(1.1);
-    }
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .circle-container img:hover {
+    transform: scale(1.1);
+  }
+  .circle-container img.active {
+    border-color: #3b82f6; /* Tailwind's blue-500 */
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6);
+  }
   </style>
 </head>
 <body class="antialiased bg-gray-50">
@@ -81,11 +85,11 @@
   // Food items data with categories
   const foodItems = [
     { id: 1, category: 'A', name: "Margherita Pizza", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$14.99", link: "#" },
-    { id: 2, category: 'A', name: "Grilled Salmon", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$22.50", link: "#" },
+    { id: 2, category: 'A', name: "Grilled Salmon", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e", price: "$22.50", link: "#" },
     { id: 3, category: 'B', name: "Caesar Salad", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$11.75", link: "#" },
     { id: 4, category: 'B', name: "Beef Burger", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$16.25", link: "#" },
-    { id: 5, category: 'C', name: "Chicken Pasta", image: "https://via.placeholder.com/400x300?text=Pasta", price: "$18.00", link: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" },
-    { id: 6, category: 'C', name: "Chocolate Cake", image: "https://via.placeholder.com/400x300?text=Cake", price: "$8.99", link: "https://zomato.onelink.me/xqzv/9s3kzf09" }
+    { id: 5, category: 'C', name: "Chicken Pasta", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e", price: "$18.00", link: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" },
+    { id: 6, category: 'C', name: "Chocolate Cake", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fshake_img.png?alt=media&token=b4716a9a-9acd-4e51-8d49-06764addcbd8", price: "$8.99", link: "https://zomato.onelink.me/xqzv/9s3kzf09" }
   ];
 
   function generateStars() {
@@ -126,10 +130,20 @@
     foodGrid.innerHTML = filteredItems.map(item => createFoodCard(item)).join('');
   }
 
-  function filterCategory(cat) {
-    displayFoodCards(cat);
+  
+function highlightCircle(imgElement) {
+    // Remove active class from all circles
+    document.querySelectorAll('.circle-container img').forEach(img => {
+      img.classList.remove('active');
+    });
+    // Add active class to clicked image
+    imgElement.classList.add('active');
   }
 
+  function filterCategory(cat, imgElement) {
+    highlightCircle(imgElement);
+    displayFoodCards(cat);
+  }
   document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const foodLink = params.get('done'); // read ?done=A
