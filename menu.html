@@ -2,28 +2,34 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Delicious Food Menu</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       background: #fef9f4;
-      padding: 20px;
+      padding: 10px;
+      margin: 0;
       text-align: center;
     }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
       color: #d32f2f;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     }
+
     .menu {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 15px;
     }
+
     .item {
-      width: 250px;
+      flex: 1 1 300px;
+      max-width: 300px;
       background: white;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -31,34 +37,44 @@
       transition: transform 0.3s ease;
       cursor: pointer;
     }
+
     .item:hover {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
+
     .item img {
       width: 100%;
-      height: 160px;
+      height: 180px;
       object-fit: cover;
     }
+
     .item h3 {
       margin: 10px;
       font-size: 1.2rem;
       color: #333;
     }
+
     .item p {
-      margin: 0 10px 10px;
-      font-size: 1rem;
+      margin: 0 10px 15px;
+      font-size: 0.95rem;
       color: #777;
     }
+
     /* Single item animated view */
     .animated-view {
       animation: fadeIn 0.8s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
     .animated-view img {
-      width: 80%;
+      width: 90%;
       max-width: 500px;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
+
     button {
       margin-top: 20px;
       padding: 12px 25px;
@@ -67,17 +83,40 @@
       border: none;
       border-radius: 25px;
       font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
+
     button:hover {
       transform: scale(1.05);
       box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      .item img {
+        height: 140px;
+      }
+      .item h3 {
+        font-size: 1rem;
+      }
+      .item p {
+        font-size: 0.85rem;
+      }
+      button {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
     }
   </style>
 </head>
@@ -89,22 +128,19 @@
   </div>
 
   <script>
-    // Menu Data
     const menuData = [
-      { category: 'A', name: 'Grilled Chicken', description: 'Juicy and spicy grilled chicken', img: 'https://readdy.ai/api/search-image?query=Delicious' },
-      { category: 'A', name: 'Paneer Tikka', description: 'Soft paneer cubes roasted to perfection', img: 'https://readdy.ai/api/search-image?query=Perfectly' },
-      { category: 'B', name: 'Veg Burger', description: 'Loaded with fresh veggies', img: 'https://readdy.ai/api/search-image?query=Perfectly' },
-      { category: 'B', name: 'Cheese Pizza', description: 'Extra cheese delight', img: 'https://readdy.ai/api/search-image?query=Fresh' },
-      { category: 'C', name: 'Brownie', description: 'Chocolate fudge brownie', img: 'https://readdy.ai/api/search-image?query=Delicious' },
-      { category: 'C', name: 'Ice Cream Sundae', description: 'Sweet and creamy', img: 'https://readdy.ai/api/search-image?query=Perfectly' }
+      { category: 'A', name: 'Grilled Chicken', description: 'Juicy and spicy grilled chicken', img: 'https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6' },
+      { category: 'A', name: 'Paneer Tikka', description: 'Soft paneer cubes roasted to perfection', img: 'https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6' },
+      { category: 'B', name: 'Veg Burger', description: 'Loaded with fresh veggies', img: 'https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6' },
+      { category: 'B', name: 'Cheese Pizza', description: 'Extra cheese delight', img: 'https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6' },
+      { category: 'C', name: 'Brownie', description: 'Chocolate fudge brownie', img: 'https://via.placeholder.com/250x160?text=Brownie' },
+      { category: 'C', name: 'Ice Cream Sundae', description: 'Sweet and creamy', img: 'https://via.placeholder.com/250x160?text=Ice+Cream+Sundae' }
     ];
 
-    // Get URL params
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category');
     const imgLink = params.get('img');
 
-    // If img parameter exists → show single item view
     if (imgLink) {
       document.getElementById('app').innerHTML = `
         <div class="animated-view">
@@ -115,7 +151,6 @@
         </div>
       `;
     } else {
-      // Show category-based menu
       const filteredMenu = menuData.filter(item => item.category === category);
       const menuList = document.getElementById('menuList');
 
@@ -130,7 +165,6 @@
       });
     }
 
-    // Redirect to same page with img param
     function viewItem(img) {
       window.location.href = window.location.pathname + "?img=" + encodeURIComponent(img);
     }
