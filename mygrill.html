@@ -212,8 +212,8 @@
   function goToCategory(cat) {
     window.location.href = "menu.html?done=" + cat;
   }
- function openCard() {
-    window.location.href = card.html;
+  function openCard() {
+    window.location.href = "card.html"; // FIXED (was missing quotes)
   }
 
   const params = new URLSearchParams(window.location.search);
@@ -222,23 +222,20 @@
   if (fooklink === 'show') {
     showToast("data have");
   } else {
-        document.getElementById('accountBtn').style.display = 'none'; // Hide button
+    document.getElementById('accountBtn').style.display = 'none';
     showToast("no");
   }
-  function goToNextPage() {
-    const params = new URLSearchParams(window.location.search);
-    const userId = params.get('fook');
-   window.location.href = profile.html?id=${userId}&rest=mygrill;
-}
 
+  function goToNextPage() {
+    const userId = new URLSearchParams(window.location.search).get('fook');
+    window.location.href = `profile.html?id=${userId}&rest=mygrill`; // FIXED string template
+  }
 
   function showToast(message) {
     const toast = document.getElementById("toast");
     toast.textContent = message;
     toast.style.display = "block";
-    setTimeout(() => {
-      toast.style.display = "none";
-    }, 3000);
+    setTimeout(() => { toast.style.display = "none"; }, 3000);
   }
 </script>
 
