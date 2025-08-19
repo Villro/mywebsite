@@ -207,13 +207,13 @@
 
 <script>
   function openMenu(link) {
-    window.location.href = `/showmenu.html?img=${encodeURIComponent(link)}`;
+    window.location.href = `../showmenu.html?img=${encodeURIComponent(link)}`;
   }
   function goToCategory(cat) {
-    window.location.href = "/menu.html?done=" + cat;
+    window.location.href = "../menu.html?done=" + cat;
   }
   function openCard() {
-    window.location.href = "/card.html"; // FIXED (was missing quotes)
+    window.location.href = "../card.html"; // FIXED (was missing quotes)
   }
 
   const params = new URLSearchParams(window.location.search);
@@ -228,7 +228,7 @@
 
   function goToNextPage() {
     const userId = new URLSearchParams(window.location.search).get('fook');
-    window.location.href = `/profile.html?id=${userId}&rest=mygrill`; // FIXED string template
+    window.location.href = `../profile.html?id=${userId}&rest=mygrill`; // FIXED string template
   }
 
   function showToast(message) {
