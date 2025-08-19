@@ -1,105 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu View</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delicious Food Menu</title>
 
-  <!-- Google Font for Stylish Heading -->
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
   <style>
-    /* Background animation */
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(-45deg, #fff, #fad0c4, #fff, #ffdde1);
-      background-size: 400% 400%;
-      animation: gradientBG 12s ease infinite;
-      color: #fff;
-      overflow-x: hidden;
-      overflow-y: auto; /* Enable vertical scroll */
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Heading */
-    h1 {
+    .font-pacifico {
       font-family: 'Pacifico', cursive;
-      font-size: 2.2rem;
-      margin: 10px 0 20px;
-      text-align: center;
-      color: #ff5722;
-      letter-spacing: 1px;
-      text-shadow: 3px 3px 8px rgba(0,0,0,0.2);
-      animation: fadeInDown 1s ease forwards;
     }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Image */
-    img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      opacity: 0;
-      animation: fadeIn 1.5s ease forwards;
-      animation-delay: 0.5s;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    /* Button */
-    button {
-      margin: 25px 0;
-      padding: 12px 25px;
-      background: linear-gradient(45deg, #ff512f, #dd2476);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    button:hover {
+    .hover-scale:hover {
       transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    .hover-shadow:hover {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .circle-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .circle-container img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .circle-container img:hover {
+      transform: scale(1.1);
+    }
+    .circle-container img.active {
+      border-color: #3b82f6; /* Tailwind blue-500 */
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6);
     }
   </style>
 </head>
-<body>
+<body class="antialiased bg-gray-50">
 
-  <h1>🍽️ Our Delicious Menu</h1>
-  <img id="menuImg" src="" alt="Menu Image">
-  <button onclick="goBack()">⬅ Back</button>
+  <!-- Header -->
+  <div class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <h1 class="text-3xl font-bold text-gray-900 text-center font-pacifico">Delicious Food Menu</h1>
+      <p class="text-gray-600 text-center mt-2">Choose from our selection of amazing dishes</p>
+    </div>
+  </div>
+
+  <!-- Category Selector -->
+  <div class="circle-container">
+    <img data-cat="A" src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fzomato-app-logo-icon-hd-png-701751694968330repz0n4tud-modified.png?alt=media&token=f767c0e6-ecd7-450f-b8e7-a1e3a6245065">
+    <img data-cat="B" src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fswi.png?alt=media&token=8630e991-c779-42c1-a148-f7d75c765e92">
+    <img data-cat="C" src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fsoffer.png?alt=media&token=365032b4-daa5-440b-a845-1a3ebf72ba82">
+  </div>
+
+  <!-- Food Cards Grid -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="foodGrid"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="bg-white border-t mt-16">
+    <div class="max-w-7xl mx-auto px-4 py-8 text-center">
+      <p class="text-gray-600">© 2024 Delicious Food Menu. All rights reserved.</p>
+    </div>
+  </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const imgLink = params.get('img');
-    document.getElementById('menuImg').src = imgLink;
+    // Food items data with categories
+    const foodItems = [
+      { id: 1, category: 'A', name: "Margherita Pizza", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$14.99", link: "https://zomato.onelink.me/xqzv/9s3kzf09" },
+      { id: 2, category: 'A', name: "Grilled Salmon", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e", price: "$22.50", link: "#" },
+      { id: 3, category: 'B', name: "Caesar Salad", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$11.75", link: "#" },
+      { id: 4, category: 'B', name: "Beef Burger", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$16.25", link: "#" },
+      { id: 5, category: 'C', name: "Chicken Pasta", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e", price: "$18.00", link: "#" },
+      { id: 6, category: 'C', name: "Chocolate Cake", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fshake_img.png?alt=media&token=b4716a9a-9acd-4e51-8d49-06764addcbd8", price: "$8.99", link: "#" },
+      { id: 7, category: 'A', name: "Chicken Pasta", image: "https://plus.unsplash.com/premium_photo-1664472682525-0c0b50534850?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", price: "$18.00", link: "#" },
+      { id: 8, category: 'A', name: "Chocolate Cake", image: "https://plus.unsplash.com/premium_photo-1726804881341-bfc9554ad94f?q=80&w=791&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", price: "$8.99", link: "#" }
+    
+    ];
 
-    function goBack() {
-      window.history.back();
+    function generateStars() {
+      return `
+        <div class="flex items-center text-yellow-400">
+          <i class="ri-star-fill"></i>
+          <i class="ri-star-fill"></i>
+          <i class="ri-star-fill"></i>
+          <i class="ri-star-fill"></i>
+          <i class="ri-star-line"></i>
+        </div>
+      `;
     }
+
+    function createFoodCard(item) {
+      return `
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-shadow transition-all duration-300">
+          <div class="relative h-56 overflow-hidden">
+            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover object-top hover-scale transition-transform duration-300" />
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">${item.name}</h3>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xl font-bold text-green-600">${item.price}</span>
+              ${generateStars()}
+            </div>
+            <button onclick="window.open('${item.link}', '_blank')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+              <i class="ri-external-link-line"></i> View Details
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function displayFoodCards(category = null) {
+      const foodGrid = document.getElementById('foodGrid');
+      let filteredItems = category ? foodItems.filter(item => item.category === category) : foodItems;
+      foodGrid.innerHTML = filteredItems.map(item => createFoodCard(item)).join('');
+    }
+
+    function highlightCircle(cat) {
+      document.querySelectorAll('.circle-container img').forEach(img => {
+        img.classList.toggle('active', img.dataset.cat === cat);
+      });
+    }
+
+    function filterCategory(cat) {
+      highlightCircle(cat);
+      displayFoodCards(cat);
+      history.replaceState(null, '', '?done=' + cat);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const foodLink = params.get('done');
+      if (foodLink) {
+        filterCategory(foodLink);
+      } else {
+        displayFoodCards();
+      }
+
+      document.querySelectorAll('.circle-container img').forEach(img => {
+        img.addEventListener('click', () => {
+          filterCategory(img.dataset.cat);
+        });
+      });
+    });
   </script>
 
 </body>
