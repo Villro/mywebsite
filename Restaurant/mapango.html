@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Grill Restaurant</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, #fff7f0, #ffe0cc);
+    color: #333;
+    animation: fadeIn 0.6s ease-in;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(90deg, #ff5722, #ff7e47);
+    color: white;
+    padding: 18px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    animation: slideDown 0.6s ease;
+  }
+
+  /* CIRCLE CATEGORY BUTTONS */
+  .circle-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(8px);
+  }
+  .circle-container img {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    border: 3px solid #ff5722;
+    object-fit: cover;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .circle-container img:hover {
+    transform: scale(1.15);
+    box-shadow: 0 8px 20px rgba(255,87,34,0.4);
+    cursor: pointer;
+  }
+
+  /* GRID ITEMS */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    padding: 8px;
+  }
+  .grid-item {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .grid-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    cursor: pointer;
+  }
+  .grid-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+  }
+  .food-name {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #ff5722;
+  }
+
+  /* BUTTON STYLE */
+  button {
+    padding: 8px 18px;
+    background: linear-gradient(45deg, #ff512f, #ff9966);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 16px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0.9;
+    display: none;
+    z-index: 1000;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  @keyframes slideDown {
+    from {transform: translateY(-50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+  }
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<header>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span>My Grill Restaurant</span>
+    <button id="accountBtn" onclick="goToNextPage()">Account</button>
+  </div>
+</header>
+
+<!-- CATEGORY BUTTONS -->
+<div class="circle-container">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fzomato-app-logo-icon-hd-png-701751694968330repz0n4tud-modified.png?alt=media&token=f767c0e6-ecd7-450f-b8e7-a1e3a6245065" alt="Category A" onclick="goToCategory('A')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fswi.png?alt=media&token=8630e991-c779-42c1-a148-f7d75c765e92" alt="Category B" onclick="goToCategory('B')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fsoffer.png?alt=media&token=365032b4-daa5-440b-a845-1a3ebf72ba82" alt="Category C" onclick="goToCategory('C')">
+</div>
+
+<!-- MENU ITEMS -->
+
+
+  <div class="restaurant-img" onclick="openCard()">
+    <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="280px" gravity height="98px" padding="4px"/></p>
+  </div>
+  <div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2F5.png?alt=media&token=c9593e77-d93c-4060-8576-716489ab0c85')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+  <div class="food-name">Pizza</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2F6.png?alt=media&token=a21eca4f-6448-405d-ab22-9e0d23a83c65')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
+      <div class="food-name">Burger</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2F7.png?alt=media&token=bccd8bd4-6189-44eb-a6f0-ca0355926911')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fcoldrik.png?alt=media&token=9b11346f-855e-47d8-8719-9855507ea2db" alt="Drink">
+  <div class="food-name">Drink</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fffod.png?alt=media&token=42db8209-cacb-4c4e-a181-c05acdf1ae54" alt="Burger">
+      <div class="food-name">Combo</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fsoffer.png?alt=media&token=365032b4-daa5-440b-a845-1a3ebf72ba82" alt="Pizza">
+  <div class="food-name">Special Offer</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fshake_img.png?alt=media&token=b4716a9a-9acd-4e51-8d49-06764addcbd8" alt="Burger">
+      <div class="food-name">MilkShakes</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Flava_cake.png?alt=media&token=55647c98-228c-4f44-8cc1-8d4c51f52c8a" alt="Pizza">
+  <div class="food-name">ChocoLava</div>
+</div>
+    <!-- Item 2 -->
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fchaap_ig.png?alt=media&token=d92ad975-0c5b-4553-b4db-c90d429169f7" alt="Burger">
+      <div class="food-name">Main Course</div>
+    </div>
+    <!-- Add more items below as needed -->
+  </div> 
+    <!-- Add more items below as needed -->
+  </div> 
+
+<script>
+  function openMenu(link) {
+    window.location.href = `showmenu.html?img=${encodeURIComponent(link)}`;
+  }
+  function goToCategory(cat) {
+    window.location.href = "menu.html?done=" + cat;
+  }
+  function openCard() {
+    window.location.href = "card.html"; // FIXED (was missing quotes)
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const fooklink = params.get('done');
+
+  if (fooklink === 'show') {
+    showToast("data have");
+  } else {
+    document.getElementById('accountBtn').style.display = 'none';
+    showToast("no");
+  }
+
+  function goToNextPage() {
+    const userId = new URLSearchParams(window.location.search).get('fook');
+    window.location.href = `profile.html?id=${userId}&rest=mygrill`; // FIXED string template
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.style.display = "block";
+    setTimeout(() => { toast.style.display = "none"; }, 3000);
+  }
+</script>
+
+</body>
+</html>
