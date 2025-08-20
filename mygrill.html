@@ -227,27 +227,72 @@ header {
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
     @keyframes slideDown { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
 
-  .menu-card {
+    h2 {
+      text-align: center;
+      background: #eee;
+      padding: 12px;
+      margin: 0;
+      font-size: 18px;
+      border-bottom: 2px solid #ddd;
+    }
+
+    /* Horizontal scroller */
+    .dish-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding: 15px;
       background: #fff;
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      margin: 15px;
     }
-    .menu-card:hover {
-      transform: translateY(-4px);
+    .dish-container::-webkit-scrollbar {
+      display: none;
     }
-    .price {
-      font-size: 1rem;
+
+    /* Dish Card */
+    .dish-card {
+      min-width: 160px;
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .dish-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      cursor: pointer;
+    }
+
+    .dish-card img {
+      width: 100%;
+      height: 120px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .dish-name {
+      font-weight: bold;
+      margin: 8px 0 5px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .prices {
+      font-size: 14px;
+      color: #666;
     }
     .cut-price {
       text-decoration: line-through;
       color: #999;
       margin-right: 6px;
     }
-    .real-price {
+    .org-price {
+      color: #e91e63;
       font-weight: bold;
-      color: #e63946;
     }
   </style>
 </head>
@@ -420,66 +465,46 @@ header {
   }
 </script>
 
-  <!-- Daily Offer Section -->
-  <section class="p-4">
-    <h2 class="text-xl font-bold text-center text-orange-600 mb-4">
-      🍴 Daily Offer <br>
-      <span class="text-sm text-gray-600">1:30 PM – 4:00 PM</span>
-    </h2>
+    <h2>🍽 Daily Offer (1:30 PM - 4:00 PM)</h2>
 
-    <!-- Grid List -->
-    <div class="grid grid-cols-2 gap-4">
-      
-      <!-- Card 1 -->
-      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=400&q=60" 
-             alt="Pizza" 
-             class="w-full h-28 object-cover">
-        <div class="p-3 text-center">
-          <h3 class="text-sm font-semibold text-gray-800">Cheese Pizza</h3>
-          <p class="text-xs text-gray-500 line-through">₹299</p>
-          <p class="text-orange-600 font-bold">₹199</p>
-        </div>
+  <div class="dish-container">
+    <div class="dish-card">
+      <img src="https://www.cookwithmanali.com/wp-content/uploads/2014/09/Vegetable-Pizza-500x500.jpg" alt="Pizza">
+      <div class="dish-name">Veg Pizza</div>
+      <div class="prices">
+        <span class="cut-price">₹299</span>
+        <span class="org-price">₹199</span>
       </div>
-
-      <!-- Card 2 -->
-      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-        <img src="https://images.unsplash.com/photo-1601924582971-d9b6a0d3cf14?auto=format&fit=crop&w=400&q=60" 
-             alt="Burger" 
-             class="w-full h-28 object-cover">
-        <div class="p-3 text-center">
-          <h3 class="text-sm font-semibold text-gray-800">Beef Burger</h3>
-          <p class="text-xs text-gray-500 line-through">₹199</p>
-          <p class="text-orange-600 font-bold">₹129</p>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=400&q=60" 
-             alt="Pasta" 
-             class="w-full h-28 object-cover">
-        <div class="p-3 text-center">
-          <h3 class="text-sm font-semibold text-gray-800">Creamy Pasta</h3>
-          <p class="text-xs text-gray-500 line-through">₹249</p>
-          <p class="text-orange-600 font-bold">₹179</p>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-        <img src="https://images.unsplash.com/photo-1617196037295-8f68c2fe07e6?auto=format&fit=crop&w=400&q=60" 
-             alt="Fries" 
-             class="w-full h-28 object-cover">
-        <div class="p-3 text-center">
-          <h3 class="text-sm font-semibold text-gray-800">French Fries</h3>
-          <p class="text-xs text-gray-500 line-through">₹149</p>
-          <p class="text-orange-600 font-bold">₹99</p>
-        </div>
-      </div>
-
     </div>
-  </section>
+
+    <div class="dish-card">
+      <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2021/12/veg-burger-recipe.jpg" alt="Burger">
+      <div class="dish-name">Cheese Burger</div>
+      <div class="prices">
+        <span class="cut-price">₹149</span>
+        <span class="org-price">₹99</span>
+      </div>
+    </div>
+
+    <div class="dish-card">
+      <img src="https://www.cookwithmanali.com/wp-content/uploads/2019/04/Hakka-Noodles-500x500.jpg" alt="Noodles">
+      <div class="dish-name">Hakka Noodles</div>
+      <div class="prices">
+        <span class="cut-price">₹199</span>
+        <span class="org-price">₹129</span>
+      </div>
+    </div>
+
+    <div class="dish-card">
+      <img src="https://www.cookwithmanali.com/wp-content/uploads/2021/05/Paneer-Tikka-500x500.jpg" alt="Paneer Tikka">
+      <div class="dish-name">Paneer Tikka</div>
+      <div class="prices">
+        <span class="cut-price">₹249</span>
+        <span class="org-price">₹179</span>
+      </div>
+    </div>
+  </div>
+
 
     
 
