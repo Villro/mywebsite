@@ -70,8 +70,8 @@
 /* BANNER */
 .banner {
   position: relative;
-  width: 92%;
-  height: 40vh;
+  width: 90%;
+  height: 36vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,20 +100,24 @@
   padding: 15px;
 }
 .banner-text h1 {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   font-weight: 800;
   margin-bottom: 8px;
 }
 .banner-text span {
+  display: inline-flex;        /* flexbox for centering */
+  justify-content: center;
+  align-items: center;
+  width: 70px;                 /* fixed size circle */
+  height: 70px;
   font-size: 1.2rem;
   font-weight: 600;
-  background: linear-gradient(45deg, #ff512f, #f09819); /* softer orange gradient */
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  padding: 6px 14px;
-  border-radius: 8px;
+  background: #e0e0e0;         /* light grey background */
+  color: #ff7a3c;              /* orange text */
+  border-radius: 50%;          /* makes it circular */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
+
 
     /* CATEGORY SCROLLER */
     .circle-container {
