@@ -136,6 +136,23 @@
     <button id="accountBtn" onclick="goToNextPage()">Account</button>
   </div>
 </header>
+  <!-- DAILY OFFER BANNER -->
+<div id="daily-banner"></div>
+
+<style>
+  #daily-banner {
+    background: linear-gradient(90deg, #ff9800, #ff5722);
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+</style>
+
+
+
 
 <!-- CATEGORY BUTTONS -->
 <div class="circle-container" id="contain">
@@ -226,6 +243,21 @@
     const userId = new URLSearchParams(window.location.search).get('fook');
     window.location.href = `profile.html?id=${userId}&rest=mygrill`; // FIXED string template
   }
+
+   const dailyOffers = {
+    0: "🍲 Sunday Special: Buy 1 Get 1 Soup Free!",
+    1: "🍕 Monday Madness: Flat 20% Off on Starters!",
+    2: "🥘 Tandoori Tuesday: Free Naan with Any Curry!",
+    3: "🍝 Wok Wednesday: 25% Off Fried Rice & Noodles!",
+    4: "🥤 Thirsty Thursday: Free Milkshake with Meal!",
+    5: "🍛 Friday Feast: Get a Free Dessert with Main Course!",
+    6: "🥟 Saturday Treat: Flat 15% Off on Momos & Rolls!"
+  };
+
+  // Get today's banner
+  const today = new Date().getDay(); // 0=Sunday, 1=Monday...
+  const banner = document.getElementById("daily-banner");
+  banner.textContent = dailyOffers[today];
 
   function showToast(message) {
     const toast = document.getElementById("toast");
