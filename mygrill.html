@@ -93,13 +93,15 @@
   position: absolute;
   text-align: center;
   color: transparent;
-  background: linear-gradient(45deg, #ff7e29, #ffb347);
+  background: linear-gradient(45deg, #ff6b2d, #ff9d4d);
   -webkit-background-clip: text;
   background-clip: text;
   z-index: 2;
   padding: 15px;
-  text-shadow: 0 0 8px rgba(255, 123, 47, 0.6), 
-               0 0 18px rgba(255, 123, 47, 0.4);
+  text-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.25),   /* soft dark base for readability */
+    0 0 6px rgba(255, 130, 60, 0.45), /* subtle warm glow */
+    0 0 14px rgba(255, 150, 70, 0.25); /* gentle outer fade */
 }
 .banner-text h1 {
   font-size: 2.4rem;
@@ -109,13 +111,12 @@
 .banner-text span {
   font-size: 1.2rem;
   font-weight: 600;
-  background: rgba(255, 140, 60, 0.12);
-  color: #ff6f3c;
+  background: rgba(255, 120, 60, 0.1);
+  color: #ff7a3c;
   padding: 6px 14px;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(255, 120, 50, 0.25);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
-
     /* CATEGORY SCROLLER */
     .circle-container {
       display: flex;
