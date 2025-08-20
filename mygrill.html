@@ -16,8 +16,8 @@
       padding-bottom: 70px; /* for bottom nav */
     }
 
-   header {
-  background: linear-gradient(90deg, #d32f2f, #f57c00, #ffca28); /* red → orange → gold */
+  header {
+  background: linear-gradient(90deg, #d32f2f, #f57c00, #ffca28);
   color: white;
   height: 90px;
   display: flex;
@@ -30,7 +30,8 @@
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
 }
-/* Inside container */
+
+/* Container */
 .header-container {
   width: 100%;
   max-width: 1200px;
@@ -47,6 +48,29 @@
   letter-spacing: 1px;
 }
 
+/* Round Icon Buttons */
+.header-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
 /* Button */
 #accountBtn {
   background: white;
@@ -223,10 +247,27 @@
 
 <header>
   <div class="header-container">
-    <span>My Grill Restaurant</span>
+    <!-- Left: Call & Location Icons -->
+    <div class="header-icons">
+      <a href="tel:+911234567890" class="icon-btn">
+        <i class="ri-phone-fill"></i>
+      </a>
+      <a href="https://maps.google.com" target="_blank" class="icon-btn">
+        <i class="ri-map-pin-fill"></i>
+      </a>
+    </div>
+
+    <!-- Middle: Title -->
+    <span class="header-title">My Grill Restaurant</span>
+
+    <!-- Right: Account Button -->
     <button id="accountBtn" onclick="goToNextPage()">Account</button>
   </div>
 </header>
+
+<!-- Add Remix Icons (for phone & location) -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
  <div class="banner">
     <img id="banner-img" src="" alt="Banner">
     <div class="banner-text" id="banner-text"></div>
