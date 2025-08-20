@@ -226,6 +226,29 @@ header {
     /* ANIMATIONS */
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
     @keyframes slideDown { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+
+    .menu-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .menu-card:hover {
+      transform: translateY(-4px);
+    }
+    .price {
+      font-size: 0.95rem;
+    }
+    .cut-price {
+      text-decoration: line-through;
+      color: #999;
+      margin-right: 6px;
+    }
+    .real-price {
+      font-weight: bold;
+      color: #e63946;
+    }
   </style>
 </head>
 <body>
@@ -397,64 +420,65 @@ header {
   }
 </script>
 
-     <section class="p-6">
-    <h2 class="text-2xl font-bold text-center text-orange-600 mb-6">
-      🍽️ Daily Offer (1:30 PM – 4:00 PM) 🍽️
+<div class="text-center py-6">
+    <h2 class="text-2xl font-bold text-orange-600">
+      Daily Offer (1:30 PM – 4:00 PM)
     </h2>
+    <p class="text-gray-500">Order now and enjoy special prices!</p>
+  </div>
 
-    <!-- Grid Container -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      
-      <!-- Card Item -->
-      <div class="bg-white rounded-xl shadow-md p-4 flex items-center gap-4">
-        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092" 
-             alt="Dish" 
-             class="w-24 h-24 object-cover rounded-lg">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-800">Grilled Chicken</h3>
-          <p class="text-gray-500 line-through">₹350</p>
-          <p class="text-orange-600 font-bold">₹249</p>
+  <!-- Grid List -->
+  <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-6 pb-10">
+    
+    <!-- Item 1 -->
+    <div class="menu-card">
+      <img src="https://source.unsplash.com/400x250/?pizza" alt="Pizza" class="w-full h-48 object-cover">
+      <div class="p-4">
+        <h3 class="text-lg font-semibold text-gray-800">Cheese Pizza</h3>
+        <div class="price mt-2">
+          <span class="cut-price">₹299</span>
+          <span class="real-price">₹199</span>
         </div>
       </div>
-
-      <!-- Card Item -->
-      <div class="bg-white rounded-xl shadow-md p-4 flex items-center gap-4">
-        <img src="https://images.unsplash.com/photo-1604908813020-84b52b47c0e1" 
-             alt="Dish" 
-             class="w-24 h-24 object-cover rounded-lg">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-800">Cheese Pizza</h3>
-          <p class="text-gray-500 line-through">₹500</p>
-          <p class="text-orange-600 font-bold">₹349</p>
-        </div>
-      </div>
-
-      <!-- Card Item -->
-      <div class="bg-white rounded-xl shadow-md p-4 flex items-center gap-4">
-        <img src="https://images.unsplash.com/photo-1606756796725-8e9b8bb99da7" 
-             alt="Dish" 
-             class="w-24 h-24 object-cover rounded-lg">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-800">Pasta Alfredo</h3>
-          <p class="text-gray-500 line-through">₹400</p>
-          <p class="text-orange-600 font-bold">₹299</p>
-        </div>
-      </div>
-
-      <!-- Card Item -->
-      <div class="bg-white rounded-xl shadow-md p-4 flex items-center gap-4">
-        <img src="https://images.unsplash.com/photo-1594007654729-407eedc4e5bc" 
-             alt="Dish" 
-             class="w-24 h-24 object-cover rounded-lg">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-800">Veg Burger</h3>
-          <p class="text-gray-500 line-through">₹220</p>
-          <p class="text-orange-600 font-bold">₹159</p>
-        </div>
-      </div>
-
     </div>
-  </section>
+
+    <!-- Item 2 -->
+    <div class="menu-card">
+      <img src="https://source.unsplash.com/400x250/?burger" alt="Burger" class="w-full h-48 object-cover">
+      <div class="p-4">
+        <h3 class="text-lg font-semibold text-gray-800">Grilled Burger</h3>
+        <div class="price mt-2">
+          <span class="cut-price">₹249</span>
+          <span class="real-price">₹149</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="menu-card">
+      <img src="https://source.unsplash.com/400x250/?pasta" alt="Pasta" class="w-full h-48 object-cover">
+      <div class="p-4">
+        <h3 class="text-lg font-semibold text-gray-800">Italian Pasta</h3>
+        <div class="price mt-2">
+          <span class="cut-price">₹199</span>
+          <span class="real-price">₹119</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="menu-card">
+      <img src="https://source.unsplash.com/400x250/?biryani" alt="Biryani" class="w-full h-48 object-cover">
+      <div class="p-4">
+        <h3 class="text-lg font-semibold text-gray-800">Chicken Biryani</h3>
+        <div class="price mt-2">
+          <span class="cut-price">₹349</span>
+          <span class="real-price">₹249</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 </body>
 </html>
