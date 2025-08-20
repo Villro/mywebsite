@@ -16,8 +16,9 @@
       padding-bottom: 70px; /* for bottom nav */
     }
 
-  header {
-  background: linear-gradient(90deg, #d32f2f, #f57c00, #ffca28);
+/* Header */
+header {
+  background: linear-gradient(90deg, #d32f2f, #f57c00, #ffca28); /* red → orange → gold */
   color: white;
   height: 90px;
   display: flex;
@@ -31,7 +32,7 @@
   border-bottom-right-radius: 12px;
 }
 
-/* Container */
+/* Inside container */
 .header-container {
   width: 100%;
   max-width: 1200px;
@@ -41,36 +42,40 @@
   align-items: center;
 }
 
-/* Title */
+/* Title (left side) */
 .header-title {
   font-size: 29px;
   font-weight: 700;
   letter-spacing: 1px;
 }
 
-/* Round Icon Buttons */
+/* Right side icons */
 .header-icons {
   display: flex;
-  gap: 10px;
+  gap: 15px; /* space between icons */
 }
 
-.icon-btn {
+.icon-circle {
   width: 40px;
   height: 40px;
-  background: rgba(255,255,255,0.15);
-  color: white;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  font-size: 20px;
-  transition: all 0.3s ease;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-.icon-btn:hover {
-  background: rgba(255,255,255,0.3);
-  transform: scale(1.1);
+.icon-circle:hover {
+  background: rgba(255,255,255,0.35);
 }
+
+.icon-circle i {
+  font-size: 20px;
+  color: white;
+}
+
 /* Button */
 #accountBtn {
   background: white;
@@ -245,25 +250,22 @@
 
 <div id="toast" class="toast"></div>
 
-<header>
+
+    <header>
   <div class="header-container">
-    <!-- Left: Call & Location Icons -->
-    <div class="header-icons">
-      <a href="tel:+911234567890" class="icon-btn">
-        <i class="ri-phone-fill"></i>
-      </a>
-      <a href="https://maps.google.com" target="_blank" class="icon-btn">
-        <i class="ri-map-pin-fill"></i>
-      </a>
-    </div>
-
-    <!-- Middle: Title -->
     <span class="header-title">My Grill Restaurant</span>
-
-    <!-- Right: Account Button -->
-    <button id="accountBtn" onclick="goToNextPage()">Account</button>
+    <div class="header-icons">
+      <div class="icon-circle">
+        <i class="ri-phone-fill"></i>
+      </div>
+      <div class="icon-circle">
+        <i class="ri-map-pin-fill"></i>
+      </div>
+    </div>
+          <button id="accountBtn" onclick="goToNextPage()">Account</button>
   </div>
 </header>
+
 
 <!-- Add Remix Icons (for phone & location) -->
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
