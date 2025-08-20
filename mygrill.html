@@ -227,7 +227,7 @@ header {
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
     @keyframes slideDown { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
 
-    .menu-card {
+  .menu-card {
       background: #fff;
       border-radius: 12px;
       overflow: hidden;
@@ -238,7 +238,7 @@ header {
       transform: translateY(-4px);
     }
     .price {
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
     .cut-price {
       text-decoration: line-through;
@@ -420,21 +420,21 @@ header {
   }
 </script>
 
-<div class="text-center py-6">
-    <h2 class="text-2xl font-bold text-orange-600">
+ <div class="text-center py-6 px-3">
+    <h2 class="text-xl sm:text-2xl font-bold text-orange-600">
       Daily Offer (1:30 PM – 4:00 PM)
     </h2>
-    <p class="text-gray-500">Order now and enjoy special prices!</p>
+    <p class="text-gray-500 text-sm sm:text-base">Order now and enjoy special prices!</p>
   </div>
 
   <!-- Grid List -->
-  <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-6 pb-10">
+  <div class="max-w-6xl mx-auto px-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 pb-10">
     
     <!-- Item 1 -->
     <div class="menu-card">
-      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza" class="w-full h-48 object-cover">
-      <div class="p-4">
-        <h3 class="text-lg font-semibold text-gray-800">Cheese Pizza</h3>
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fchaap_ig.png?alt=media&token=d92ad975-0c5b-4553-b4db-c90d429169f7" alt="Pizza" class="w-full h-40 sm:h-48 object-cover">
+      <div class="p-3 sm:p-4">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800">Cheese Pizza</h3>
         <div class="price mt-2">
           <span class="cut-price">₹299</span>
           <span class="real-price">₹199</span>
@@ -444,9 +444,9 @@ header {
 
     <!-- Item 2 -->
     <div class="menu-card">
-      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger" class="w-full h-48 object-cover">
-      <div class="p-4">
-        <h3 class="text-lg font-semibold text-gray-800">Grilled Burger</h3>
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Burger" class="w-full h-40 sm:h-48 object-cover">
+      <div class="p-3 sm:p-4">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800">Grilled Burger</h3>
         <div class="price mt-2">
           <span class="cut-price">₹249</span>
           <span class="real-price">₹149</span>
@@ -456,9 +456,9 @@ header {
 
     <!-- Item 3 -->
     <div class="menu-card">
-      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Ftandori.png?alt=media&token=ec3774e3-34fa-4a8e-b455-a9d039854288" alt="Pasta" class="w-full h-48 object-cover">
-      <div class="p-4">
-        <h3 class="text-lg font-semibold text-gray-800">Italian Pasta</h3>
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fnoodles.png?alt=media&token=ce32c3b1-988a-4cfa-9cbe-fc2d80a2e84a" alt="Pasta" class="w-full h-40 sm:h-48 object-cover">
+      <div class="p-3 sm:p-4">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800">Italian Pasta</h3>
         <div class="price mt-2">
           <span class="cut-price">₹199</span>
           <span class="real-price">₹119</span>
@@ -468,9 +468,9 @@ header {
 
     <!-- Item 4 -->
     <div class="menu-card">
-      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fchaap_ig.png?alt=media&token=d92ad975-0c5b-4553-b4db-c90d429169f7" alt="Biryani" class="w-full h-48 object-cover">
-      <div class="p-4">
-        <h3 class="text-lg font-semibold text-gray-800">Chicken Biryani</h3>
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Biryani" class="w-full h-40 sm:h-48 object-cover">
+      <div class="p-3 sm:p-4">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800">Chicken Biryani</h3>
         <div class="price mt-2">
           <span class="cut-price">₹349</span>
           <span class="real-price">₹249</span>
@@ -479,6 +479,8 @@ header {
     </div>
 
   </div>
+
+    
 
 </body>
 </html>
