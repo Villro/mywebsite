@@ -7,6 +7,7 @@
 <style>
   body {
     margin: 0;
+    padding: 6;
     font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(180deg, #fff7f0, #ffe0cc);
     color: #333;
@@ -130,13 +131,13 @@
 .banner {
   position: relative;
   width: 100%;
-  height: 55vh;
+  height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   border-radius: 12px;
-  margin: 10px auto;
+  margin: 20px auto;
   max-width: 1200px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
@@ -148,57 +149,58 @@
   transition: transform 0.8s ease;
 }
 
-.banner:hover img {
-  transform: scale(1.05);
-}
-
-/* Gradient overlay */
-.banner-overlay {
+/* Dark overlay */
+.banner::after {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7));
+  background: rgba(0,0,0,0.4); /* darkness layer */
   z-index: 1;
 }
 
-/* Text */
+.banner:hover img {
+  transform: scale(1.05);
+}
+
 .banner-text {
   position: absolute;
   text-align: center;
   color: #fff;
-  z-index: 2;
+  z-index: 2; /* make sure text is above overlay */
   padding: 15px 20px;
 }
 
 .banner-text h1 {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
 }
 
 .banner-text span {
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.15);
+  font-size: 1.3rem;
+  font-weight: 400;
+  background: rgba(255, 255, 255, 0.2);
   padding: 6px 12px;
   border-radius: 8px;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .banner {
-    height: 40vh;
-  }
+  .banner { height: 40vh; }
+  .banner-text h1 { font-size: 1.8rem; }
+  .banner-text span { font-size: 1rem; }
 }
 
 @media (max-width: 480px) {
-  .banner {
-    height: 30vh;
-  }
+  .banner { height: 30vh; }
+  .banner-text h1 { font-size: 1.4rem; }
+  .banner-text span { font-size: 0.9rem; }
 }
+
 
 </style>
 </head>
