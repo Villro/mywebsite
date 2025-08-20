@@ -202,32 +202,7 @@ header {
 
  
 
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: white;
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-      z-index: 999;
-    }
-    .bottom-nav a {
-      color: #555;
-      font-size: 14px;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: color 0.3s ease;
-    }
-    .bottom-nav a:hover { color: #ff5722; }
-    .bottom-nav i { font-size: 20px; margin-bottom: 3px; }
-
+  
     /* TOAST */
     .toast {
       position: fixed;
@@ -271,10 +246,11 @@ header {
         <i class="ri-map-pin-fill"></i>
       </a>
     </div>
-                <button id="accountBtn" onclick="goToNextPage()">Account</button>
   </div>
 </header>
 
+    
+<button id="accountBtn" onclick="goToNextPage()">Account</button>
 
 <!-- Add Remix Icons (for phone & location) -->
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -297,7 +273,7 @@ header {
 
 
   <div class="restaurant-img" onclick="openCard()">
-    <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="310px" gravity height="118px" padding="4px"/></p>
+    <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="320px" gravity height="128px" padding="4px"/></p>
   </div>
   <div class="grid-container">
     <!-- Item 1 -->
