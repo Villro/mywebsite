@@ -3,142 +3,342 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>My Grill Restaurant</title>
+<title>Mapango Restaurant</title>
 <style>
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(180deg, #fff7f0, #ffe0cc);
-    color: #333;
-    animation: fadeIn 0.6s ease-in;
-  }
+    /* RESET */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* HEADER */
-  header {
-    background: linear-gradient(90deg, #ff5722, #ff7e47);
-    color: white;
-    padding: 18px;
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    animation: slideDown 0.6s ease;
-  }
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(180deg, #fff5ee, #ffe0cc);
+      color: #333;
+      animation: fadeIn 0.6s ease-in;
+      padding-bottom: 70px; /* for bottom nav */
+    }
 
-  /* CIRCLE CATEGORY BUTTONS */
-  .circle-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 15px;
-    padding: 15px;
-    background: rgba(255,255,255,0.6);
-    backdrop-filter: blur(8px);
-  }
-  .circle-container img {
-    width: 84px;
-    height: 84px;
-    border-radius: 50%;
-    border: 3px solid #ff5722;
-    object-fit: cover;
-    flex-shrink: 0;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .circle-container img:hover {
-    transform: scale(1.15);
-    box-shadow: 0 8px 20px rgba(255,87,34,0.4);
-    cursor: pointer;
-  }
+/* Header */
+header {
+  background: linear-gradient(90deg, #d32f2f, #f57c00, #ffca28); /* red → orange → gold */
+  color: white;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  animation: slideDown 0.6s ease;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
 
-  /* GRID ITEMS */
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    padding: 8px;
-  }
-  .grid-item {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(6px);
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  .grid-item:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    cursor: pointer;
-  }
-  .grid-item img {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-  }
-  .food-name {
-    margin-top: 8px;
-    font-size: 15px;
-    font-weight: bold;
-    color: #ff5722;
-  }
+/* Inside container */
+.header-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  /* BUTTON STYLE */
-  button {
-    padding: 8px 18px;
-    background: linear-gradient(45deg, #ff512f, #ff9966);
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 16px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  }
-  button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  }
+/* Title (left side) */
+.header-title {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
 
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    opacity: 0.9;
-    display: none;
-    z-index: 1000;
-  }
+/* Right side icons */
+.header-icons {
+  display: flex;
+  gap: 12px;
+}
 
-  /* ANIMATIONS */
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-  @keyframes slideDown {
-    from {transform: translateY(-50px); opacity: 0;}
-    to {transform: translateY(0); opacity: 1;}
-  }
-</style>
+.icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-decoration: none; /* remove underline from <a> */
+}
+
+.icon-circle:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+
+.icon-circle i {
+  font-size: 20px;
+  color: white;
+}
+
+/* Button */
+.account-btn-container {
+  display: flex;
+  justify-content: flex-end; /* push to right side */
+  padding: 10px 20px; /* margin inside */
+}
+
+#accountBtn {
+  background: #d32f2f;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  transition: background 0.3s;
+}
+
+#accountBtn:hover {
+  background: #b71c1c;
+}
+
+/* BANNER */
+.banner {
+  position: relative;
+  width: 90%;
+  height: 38vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 16px;
+  margin: 20px auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  background: #fff; /* light background */
+}
+.banner img {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s ease;
+}
+    
+.banner:hover img { transform: scale(1.02); }
+
+/* TEXT */
+.banner-text {
+  position: absolute;
+  text-align: center;
+  color: transparent;
+  background: linear-gradient(45deg, #ff3b2f, #ff8c42); /* red → orange blend */
+  -webkit-background-clip: text;
+  background-clip: text;
+  z-index: 2;
+  padding: 15px;
+}
+.banner-text h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.banner-text span { font-size: 1.0rem; font-weight: 600; background: rgba(255, 120, 60, 0.1); color: #ff7a3c; padding: 6px 14px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12); }
+
+
+    /* CATEGORY SCROLLER */
+    .circle-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 18px;
+      padding: 15px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      margin: 0 10px 20px;
+    }
+    .circle-container::-webkit-scrollbar { display: none; }
+    .circle-container img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid #ff5722;
+      object-fit: cover;
+      flex-shrink: 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .circle-container img:hover {
+      transform: scale(1.15);
+      box-shadow: 0 8px 20px rgba(255,87,34,0.4);
+      cursor: pointer;
+    }
+
+    /* GRID ITEMS */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 10px;
+    }
+    .grid-item {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(6px);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .grid-item:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      cursor: pointer;
+    }
+    .grid-item img {
+      width: 100%;
+      height: 120px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .food-name {
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ff5722;
+    }
+
+ 
+
+  
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 1000;
+    }
+    .toast.show { opacity: 0.95; }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    @keyframes slideDown { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+
+  h2 {
+  text-align: center;
+  background: #eee;
+  padding: 12px;
+  margin: 22px 0 0 0; /* top 7px, left/right 0, bottom 0 */
+  font-size: 22px;
+  border-bottom: 2px solid #ddd;
+}
+
+
+    /* Horizontal scroller */
+    .dish-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 12px;
+      margin: 5px;
+    }
+    .dish-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Dish Card */
+    .dish-card {
+      min-width: 160px;
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .dish-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      cursor: pointer;
+    }
+
+    .dish-card img {
+      width: 100%;
+      height: 120px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .dish-name {
+      font-weight: bold;
+      margin: 8px 0 5px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .prices {
+      font-size: 14px;
+      color: #666;
+    }
+    .cut-price {
+      text-decoration: line-through;
+      color: #999;
+      margin-right: 6px;
+    }
+    .org-price {
+      color: #e91e63;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
 <div id="toast" class="toast"></div>
 
+
+
 <header>
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <span>My Grill Restaurant</span>
-    <button id="accountBtn" onclick="goToNextPage()">Account</button>
+  <div class="header-container">
+    <span class="header-title">My Grill Restaurant</span>
+    <div class="header-icons">
+      <!-- Phone -->
+      <a href="tel:+919760678791" class="icon-circle" title="Call Us">
+        <i class="ri-phone-fill"></i>
+      </a>
+      <!-- Location -->
+      <a href="https://maps.app.goo.gl/RsXHYsFayAeFRP9T9?g_st=ac" 
+         target="_blank" 
+         class="icon-circle" 
+         title="Find Us">
+        <i class="ri-map-pin-fill"></i>
+      </a>
+    </div>
   </div>
 </header>
 
+    
+<div class="account-btn-container">
+  <button id="accountBtn" onclick="goToNextPage()">Account</button>
+</div>
+<!-- Add Remix Icons (for phone & location) -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+ <div class="banner">
+    <img id="banner-img" src="" alt="Banner">
+    <div class="banner-text" id="banner-text"></div>
+  </div>
+
+
+
 <!-- CATEGORY BUTTONS -->
-<div class="circle-container">
+<div class="circle-container" id="contain">
   <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fzomato-app-logo-icon-hd-png-701751694968330repz0n4tud-modified.png?alt=media&token=f767c0e6-ecd7-450f-b8e7-a1e3a6245065" alt="Category A" onclick="goToCategory('A')">
   <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fswi.png?alt=media&token=8630e991-c779-42c1-a148-f7d75c765e92" alt="Category B" onclick="goToCategory('B')">
   <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fsoffer.png?alt=media&token=365032b4-daa5-440b-a845-1a3ebf72ba82" alt="Category C" onclick="goToCategory('C')">
@@ -148,72 +348,64 @@
 
 
   <div class="restaurant-img" onclick="openCard()">
-    <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="280px" gravity height="98px" padding="4px"/></p>
+    <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="320px" gravity height="128px" padding="4px"/></p>
   </div>
   <div class="grid-container">
     <!-- Item 1 -->
-    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2F5.png?alt=media&token=c9593e77-d93c-4060-8576-716489ab0c85')">
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_menu(A-M)%2Fmygrill1.png?alt=media&token=39b54649-820b-4ce7-a8d9-f51016e0379e')">
   <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
-  <div class="food-name">Pizza</div>
+  <div class="food-name">Classic Pizza</div>
 </div>
     <!-- Item 2 -->
-    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2F6.png?alt=media&token=a21eca4f-6448-405d-ab22-9e0d23a83c65')">
-      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Burger">
-      <div class="food-name">Burger</div>
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_menu(A-M)%2Fmygrill4.png?alt=media&token=2ad08595-90cf-4b6d-92c1-d972aaa96e5a')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fvolcano.png?alt=media&token=88486d53-8af7-4d4a-94a2-e8c6749283fb" alt="Burger">
+      <div class="food-name">Gourmet Pizza</div>
     </div>
     <!-- Add more items below as needed -->
   </div> 
 <div class="grid-container">
     <!-- Item 1 -->
-    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2F7.png?alt=media&token=bccd8bd4-6189-44eb-a6f0-ca0355926911')">
-  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fcoldrik.png?alt=media&token=9b11346f-855e-47d8-8719-9855507ea2db" alt="Drink">
-  <div class="food-name">Drink</div>
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_menu(A-M)%2Fmygrill3.png?alt=media&token=c1fcfa6b-0902-40f7-97c9-13a83df9870a')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fshake_img.png?alt=media&token=b4716a9a-9acd-4e51-8d49-06764addcbd8" alt="Drink">
+  <div class="food-name">Burger & Sandwich</div>
 </div>
     <!-- Item 2 -->
-    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
-      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fffod.png?alt=media&token=42db8209-cacb-4c4e-a181-c05acdf1ae54" alt="Burger">
-      <div class="food-name">Combo</div>
-    </div>
-    <!-- Add more items below as needed -->
-  </div> 
-<div class="grid-container">
-    <!-- Item 1 -->
-    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
-  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fsoffer.png?alt=media&token=365032b4-daa5-440b-a845-1a3ebf72ba82" alt="Pizza">
-  <div class="food-name">Special Offer</div>
-</div>
-    <!-- Item 2 -->
-    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
-      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fshake_img.png?alt=media&token=b4716a9a-9acd-4e51-8d49-06764addcbd8" alt="Burger">
-      <div class="food-name">MilkShakes</div>
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_menu(A-M)%2Fmygrill5.png?alt=media&token=9d3f1bec-7abc-412f-b720-ac9c7bf08c36')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2FMaincourse.png?alt=media&token=6442b330-283e-4b4c-9a74-b3520ef9b8be" alt="Burger">
+      <div class="food-name">Beverages</div>
     </div>
     <!-- Add more items below as needed -->
   </div> 
 <div class="grid-container">
     <!-- Item 1 -->
     <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc')">
-  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Flava_cake.png?alt=media&token=55647c98-228c-4f44-8cc1-8d4c51f52c8a" alt="Pizza">
-  <div class="food-name">ChocoLava</div>
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fside_order.png?alt=media&token=2a08aa24-e316-4c28-bb16-5b8ab3d3b1bf" alt="Pizza">
+  <div class="food-name">Side Dishes</div>
 </div>
     <!-- Item 2 -->
-    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fmen.png?alt=media&token=286aa4d2-02f9-4777-9898-f7119ed3aec6')">
-      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fchaap_ig.png?alt=media&token=d92ad975-0c5b-4553-b4db-c90d429169f7" alt="Burger">
-      <div class="food-name">Main Course</div>
+    <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_menu(A-M)%2Fmygrill6.png?alt=media&token=7dcc97ed-57e6-4cf0-8701-d3859ddb467d')">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizza_combo.png?alt=media&token=e7658de1-4f15-4023-bd17-9be24428ea83" alt="Burger">
+      <div class="food-name">Combo Offers</div>
     </div>
     <!-- Add more items below as needed -->
   </div> 
+<div class="grid-container">
+    <!-- Item 1 -->
+  
+    <!-- Item 2 -->
+
     <!-- Add more items below as needed -->
   </div> 
 
 <script>
   function openMenu(link) {
-window.location.href = `../showmenu.html?img=${encodeURIComponent(link)}`;
+    window.location.href = `../showmenu.html?img=${encodeURIComponent(link)}`;
   }
   function goToCategory(cat) {
     window.location.href = "../menu/mapango-menu.html?done=" + cat;
   }
   function openCard() {
-    window.location.href = "../card.html"; // FIXED (was missing quotes)
+   window.location.href = "../card.html"; // FIXED (was missing quotes)
   }
 
   const params = new URLSearchParams(window.location.search);
@@ -223,13 +415,61 @@ window.location.href = `../showmenu.html?img=${encodeURIComponent(link)}`;
     showToast("data have");
   } else {
     document.getElementById('accountBtn').style.display = 'none';
+     document.getElementById('contain').style.display = 'none';
     showToast("no");
   }
 
   function goToNextPage() {
     const userId = new URLSearchParams(window.location.search).get('fook');
-    window.location.href = `../profile.html?id=${userId}&rest=mygrill`; // FIXED string template
+    window.location.href = `../profile.html?id=${userId}&rest=mapango`; // FIXED string template
   }
+
+  const offers = [
+      {
+        img: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fdeco.jpg?alt=media&token=146a5eb6-3dd8-4a9b-a045-987f74d7a28f",
+        title: "Sunday Special",
+        desc: "Buy 1 Get 1 Soup Free!"
+      },
+      {
+        img: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fdeco.jpg?alt=media&token=146a5eb6-3dd8-4a9b-a045-987f74d7a28f",
+        title: "Monday Treat",
+        desc: "Flat 20% Off on Biryani"
+      },
+      {
+        img: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fdeco.jpg?alt=media&token=146a5eb6-3dd8-4a9b-a045-987f74d7a28f",
+        title: "Tuesday Feast",
+        desc: "Buy 2 Pizzas, Get 1 Free"
+      },
+    {
+        img: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fdeco.jpg?alt=media&token=146a5eb6-3dd8-4a9b-a045-987f74d7a28f",
+        title: "Wednesday Feast",
+        desc: "Buy 2 Pizzas, Get 1 Free"
+      },
+      {
+        img: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fdeco.jpg?alt=media&token=146a5eb6-3dd8-4a9b-a045-987f74d7a28f",
+        title: "Thursday Speicial",
+        desc: "Buy 2 Pizzas, Get 1 Free"
+      },
+      {
+        img: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fdeco.jpg?alt=media&token=146a5eb6-3dd8-4a9b-a045-987f74d7a28f",
+        title: "Friday Treat",
+        desc: "Buy 2 Pizzas, Get 1 Free"
+      },
+      {
+        img: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fdeco.jpg?alt=media&token=146a5eb6-3dd8-4a9b-a045-987f74d7a28f",
+        title: "Saturday Feast",
+        desc: "Buy 2 Pizzas, Get 1 Free"
+      }
+    ];
+
+    // ✅ Pick today’s offer
+    let today = new Date().getDay(); // 0 = Sunday, 1 = Monday...
+    let offer = offers[today % offers.length];
+
+    // ✅ Update banner
+    document.getElementById("banner-img").src = offer.img;
+    document.getElementById("banner-text").innerHTML =
+      `<h1>${offer.title}</h1><span>${offer.desc}</span>`;
 
   function showToast(message) {
     const toast = document.getElementById("toast");
@@ -238,6 +478,49 @@ window.location.href = `../showmenu.html?img=${encodeURIComponent(link)}`;
     setTimeout(() => { toast.style.display = "none"; }, 3000);
   }
 </script>
+
+    <h2>🍽 Daily Offer (1:30 PM - 4:00 PM)</h2>
+
+  <div class="dish-container">
+    <div class="dish-card">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc" alt="Pizza">
+      <div class="dish-name">Veg Pizza</div>
+      <div class="prices">
+        <span class="cut-price">₹299</span>
+        <span class="org-price">₹199</span>
+      </div>
+    </div>
+
+    <div class="dish-card">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fnoodles.png?alt=media&token=ce32c3b1-988a-4cfa-9cbe-fc2d80a2e84a" alt="Burger">
+      <div class="dish-name">Cheese Burger</div>
+      <div class="prices">
+        <span class="cut-price">₹149</span>
+        <span class="org-price">₹99</span>
+      </div>
+    </div>
+
+    <div class="dish-card">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e" alt="Noodles">
+      <div class="dish-name">Hakka Noodles</div>
+      <div class="prices">
+        <span class="cut-price">₹199</span>
+        <span class="org-price">₹129</span>
+      </div>
+    </div>
+
+    <div class="dish-card">
+      <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fchaap_ig.png?alt=media&token=d92ad975-0c5b-4553-b4db-c90d429169f7" alt="Paneer Tikka">
+      <div class="dish-name">Paneer Tikka</div>
+      <div class="prices">
+        <span class="cut-price">₹249</span>
+        <span class="org-price">₹179</span>
+      </div>
+    </div>
+  </div>
+
+
+    
 
 </body>
 </html>
