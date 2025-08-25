@@ -82,14 +82,20 @@
   <script>
     // Food items data with categories
     const foodItems = [
-      { id: 1, category: 'A', name: "Margherita Pizza", image: "https://b.zmtcdn.com/data/dish_photos/971/f070af954ca60058598f7d4d87ca6971.jpeg?fit=around|130:130&crop=130:130;*,*", price: "$14.99", link: "https://zomato.onelink.me/xqzv/9s3kzf09" },
-      { id: 2, category: 'A', name: "Grilled Salmon", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e", price: "$22.50", link: "#" },
-      { id: 3, category: 'B', name: "Caesar Salad", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$11.75", link: "#" },
-      { id: 4, category: 'B', name: "Beef Burger", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fpizzalo.png?alt=media&token=0a5d0ec2-2375-4c7c-89fa-f225dd7a33bc", price: "$16.25", link: "#" },
-      { id: 5, category: 'C', name: "Chicken Pasta", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fbur_img.png?alt=media&token=83eade1c-ccf2-4c6b-9fcc-a5f588ddca8e", price: "$18.00", link: "#" },
-      { id: 6, category: 'C', name: "Chocolate Cake", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fshake_img.png?alt=media&token=b4716a9a-9acd-4e51-8d49-06764addcbd8", price: "$8.99", link: "#" },
-      { id: 7, category: 'A', name: "Chicken Pasta", image: "https://plus.unsplash.com/premium_photo-1664472682525-0c0b50534850?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", price: "$18.00", link: "#" },
-      { id: 8, category: 'A', name: "Chocolate Cake", image: "https://plus.unsplash.com/premium_photo-1726804881341-bfc9554ad94f?q=80&w=791&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", price: "$8.99", link: "#" }
+      { id: 1, category: 'A', name: "Country Feast Pizza", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FPizza1.jpg?alt=media&token=f70f12ed-5c33-4224-9468-6c27941cd78f", price: "$14.99", link: "https://zomato.onelink.me/xqzv/9s3kzf09" },
+      { id: 2, category: 'A', name: "Farm House Pizza", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FPizza2.webp?alt=media&token=175a75c1-f533-4942-9d3c-757110aa84b2", price: "$22.50", link: "#" },
+      { id: 3, category: 'A', name: "Peppy Paneer Pizza", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FPizza3.webp?alt=media&token=4c570ca7-d30a-43b2-af05-8cf781b6226a", price: "$11.75", link: "#" },
+      { id: 4, category: 'A', name: "Single Topping Corn", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FPizza4.webp?alt=media&token=837fa7ed-b2f1-4dd3-a4e7-43ea55c83528", price: "$16.25", link: "#" },
+      { id: 5, category: 'A', name: "Single Topping Capsicum", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FPizza5.jpg?alt=media&token=2ac2a02e-1f0e-48f4-8999-e555e898655f", price: "$18.00", link: "#" },
+      { id: 6, category: 'A', name: "Double Topping Corn & Paneer", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FPizza6.webp?alt=media&token=4bafe0cd-777b-4c00-ae90-4618eddc358c", price: "$8.99", link: "#" },
+      { id: 7, category: 'A', name: "Double Topping Onion & Capsicum", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FPizza6.webp?alt=media&token=4bafe0cd-777b-4c00-ae90-4618eddc358c", price: "$18.00", link: "#" },
+      { id: 8, category: 'A', name: "Cheese Volcano Peppy Panner Pizza", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2Fvolcano.png?alt=media&token=a3d5faff-6760-42ac-b136-2a13746200d3", price: "$8.99", link: "#" },
+      { id: 9, category: 'A', name: "Potato Crispy Burger", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FBurger.jpg?alt=media&token=754716f3-73f4-401a-a39b-b6c2dce1ee0f", price: "$18.00", link: "#" },
+      { id: 10, category: 'A', name: "Veg Club Sandwich", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FClub-sandwich.jpg?alt=media&token=bc4fcf5f-ed69-4253-8eda-9acca6e44382", price: "$8.99", link: "#" },
+      { id: 11, category: 'A', name: "White Sauce Pasta", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FWhite%20sauce.jpg?alt=media&token=dca783e0-ea85-4b5c-af2a-a6b0bb91ddb9", price: "$18.00", link: "#" },
+      { id: 12, category: 'A', name: "Stuffed Garlic Bread", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2Fstuff%20garlic%20bread.jfif?alt=media&token=45bdf1ce-6d9a-4657-beee-a1ebac07d36b", price: "$18.00", link: "#" },
+      { id: 13, category: 'A', name: "Solo Burger Meal", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FBurger%20Meal.jpg?alt=media&token=721a98b7-1af5-4ae1-9d98-5467751093d7", price: "$8.99", link: "#" },
+      { id: 14, category: 'A', name: "Solo Pizza Meal", image: "https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_online_menu%2FPizzaMeal.jpg?alt=media&token=b27adf4c-64c7-453a-abc6-d2c48f3fd4f3", price: "$18.00", link: "#" }
     
     ];
 
