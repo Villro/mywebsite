@@ -166,7 +166,7 @@ fileInput.addEventListener("change", () => {
 
       try {
         // Upload to Storage (villroconnection)
-        const storageRef = ref(storage, `customer_images/${uid}_${Date.now()}_${file.name}`);
+        const storageRef = ref(storage, `customer_images/${file.name}`);
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
 
