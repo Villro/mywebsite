@@ -92,7 +92,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const userId = "Usid"; // Replace with actual userId if needed
+    const userId = "Image_Get"; // Replace with actual userId if needed
 
     window.checkCode = async function() {
       const codeInput = document.getElementById("codeInput").value.trim();
@@ -109,11 +109,11 @@
         snapshot.forEach(docSnap => {
           const data = docSnap.data();
           const savedCode = data.code?.toString();
-          const restaurant = data.restaurant;
+          const restaurant = data.user_id;
 
           if (savedCode === codeInput) {
             if (restaurant) {
-              window.location.href = `image.html?fook=${userId}`;
+              window.location.href = `image.html?fook=${restaurant}`;
             } else {
               showToast("Restaurant name missing");
             }
