@@ -109,39 +109,58 @@
     const preview = document.getElementById("preview");
 
     // Process image with canvas (crop to rectangle 300x200)
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
+   fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const targetWidth = 300;
+        const targetHeight = 200;
 
-            const targetWidth = 300;
-            const targetHeight = 200;
-            canvas.width = targetWidth;
-            canvas.height = targetHeight;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
 
-            // Draw the image scaled into the rectangle
-            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+        // Calculate aspect ratios
+        const imgRatio = img.width / img.height;
+        const targetRatio = targetWidth / targetHeight;
 
-            // Preview as base64
-            preview.src = canvas.toDataURL("image/jpeg");
-            preview.classList.remove("hidden");
+        let srcX, srcY, srcWidth, srcHeight;
 
-            // Save cropped file for upload
-            canvas.toBlob(blob => {
-              fileInput.croppedFile = new File([blob], file.name, { type: "image/jpeg" });
-            }, "image/jpeg");
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+        if (imgRatio > targetRatio) {
+          // Image is wider -> crop sides
+          srcHeight = img.height;
+          srcWidth = srcHeight * targetRatio;
+          srcX = (img.width - srcWidth) / 2;
+          srcY = 0;
+        } else {
+          // Image is taller -> crop top/bottom
+          srcWidth = img.width;
+          srcHeight = srcWidth / targetRatio;
+          srcX = 0;
+          srcY = (img.height - srcHeight) / 2;
+        }
 
+        // Draw cropped portion into canvas
+        ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, targetWidth, targetHeight);
+
+        // Show preview
+        preview.src = canvas.toDataURL("image/jpeg");
+        preview.classList.remove("hidden");
+
+        // Save cropped file for upload
+        canvas.toBlob(blob => {
+          fileInput.croppedFile = new File([blob], file.name, { type: "image/jpeg" });
+        }, "image/jpeg");
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
     // Upload cropped file
     window.uploadImage = async function() {
       const file = fileInput.croppedFile || fileInput.files[0];
