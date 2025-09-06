@@ -109,7 +109,8 @@
     const preview = document.getElementById("preview");
 
     // Process image with canvas (crop to rectangle 300x200)
-   fileInput.addEventListener("change", () => {
+  // Process image with canvas (fit into 300x200, minimal crop)
+fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
@@ -124,28 +125,21 @@
         canvas.width = targetWidth;
         canvas.height = targetHeight;
 
-        // Calculate aspect ratios
-        const imgRatio = img.width / img.height;
-        const targetRatio = targetWidth / targetHeight;
+        // Fill background (white)
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, targetWidth, targetHeight);
 
-        let srcX, srcY, srcWidth, srcHeight;
+        // Calculate scale to fit
+        const scale = Math.min(targetWidth / img.width, targetHeight / img.height);
+        const newWidth = img.width * scale;
+        const newHeight = img.height * scale;
 
-        if (imgRatio > targetRatio) {
-          // Image is wider -> crop sides
-          srcHeight = img.height;
-          srcWidth = srcHeight * targetRatio;
-          srcX = (img.width - srcWidth) / 2;
-          srcY = 0;
-        } else {
-          // Image is taller -> crop top/bottom
-          srcWidth = img.width;
-          srcHeight = srcWidth / targetRatio;
-          srcX = 0;
-          srcY = (img.height - srcHeight) / 2;
-        }
+        // Center the image
+        const offsetX = (targetWidth - newWidth) / 2;
+        const offsetY = (targetHeight - newHeight) / 2;
 
-        // Draw cropped portion into canvas
-        ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, targetWidth, targetHeight);
+        // Draw scaled image
+        ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
 
         // Show preview
         preview.src = canvas.toDataURL("image/jpeg");
@@ -161,6 +155,7 @@
     reader.readAsDataURL(file);
   }
 });
+
     // Upload cropped file
     window.uploadImage = async function() {
       const file = fileInput.croppedFile || fileInput.files[0];
