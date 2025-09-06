@@ -45,7 +45,11 @@
       class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
     />
 
-    <img id="preview" class="mx-auto mb-4 max-h-60 rounded-xl hidden" alt="Preview"/>
+    <!-- Fixed rectangular preview -->
+    <img id="preview" 
+         class="mx-auto mb-4 hidden object-cover rounded-xl" 
+         alt="Preview"
+         style="width:300px; height:200px;" />
 
     <button 
       onclick="uploadImage()" 
@@ -104,20 +108,43 @@
     const fileInput = document.getElementById("fileInput");
     const preview = document.getElementById("preview");
 
+    // Process image with canvas (crop to rectangle 300x200)
     fileInput.addEventListener("change", () => {
       const file = fileInput.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = e => {
-          preview.src = e.target.result;
-          preview.classList.remove("hidden");
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            const targetWidth = 300;
+            const targetHeight = 200;
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+
+            // Draw the image scaled into the rectangle
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+            // Preview as base64
+            preview.src = canvas.toDataURL("image/jpeg");
+            preview.classList.remove("hidden");
+
+            // Save cropped file for upload
+            canvas.toBlob(blob => {
+              fileInput.croppedFile = new File([blob], file.name, { type: "image/jpeg" });
+            }, "image/jpeg");
+          };
+          img.src = e.target.result;
         };
         reader.readAsDataURL(file);
       }
     });
 
+    // Upload cropped file
     window.uploadImage = async function() {
-      const file = fileInput.files[0];
+      const file = fileInput.croppedFile || fileInput.files[0];
       if (!file) {
         showToast("Please select an image first");
         return;
