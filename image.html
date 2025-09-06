@@ -176,7 +176,7 @@ fileInput.addEventListener("change", () => {
         showToast("Image uploaded & URL saved successfully!");
       } catch (error) {
         console.error("Upload error:", error);
-        showToast("Upload failed");
+        showToast("Upload failed"+ error)
       }
     };
 
