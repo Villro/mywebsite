@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enter The Code</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    /* Toast styling */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.85);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center px-4 py-10">
+
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md fade-up">
+    <h1 class="text-3xl font-bold text-center text-orange-500 mb-6">Enter Your 6-Digit Code</h1>
+
+    <div class="flex flex-col gap-4">
+      <input 
+        type="text" 
+        id="codeInput" 
+        maxlength="6" 
+        placeholder="123456" 
+        class="border border-gray-300 rounded-lg px-4 py-3 text-lg text-center tracking-widest focus:ring-2 focus:ring-orange-400 outline-none transition"
+      >
+      <button 
+        onclick="checkCode()" 
+        class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200"
+      >
+        Submit Code
+      </button>
+    </div>
+
+    <p class="text-sm text-gray-500 text-center mt-6">Please enter the code given by the restaurant</p>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyApKZcE9n07a5ct8abRcNGj0sw0h1G9fwY",
+      authDomain: "myvillro.firebaseapp.com",
+      projectId: "myvillro",
+      storageBucket: "myvillro.firebasestorage.app",
+      messagingSenderId: "277825963335",
+      appId: "1:277825963335:web:c7b3dcfdf7be337cba7862",
+      measurementId: "G-86BMPBED29"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const userId = "Usid"; // Replace with actual userId if needed
+
+    window.checkCode = async function() {
+      const codeInput = document.getElementById("codeInput").value.trim();
+      if (codeInput.length !== 6) {
+        showToast("Please enter a valid 6-digit code");
+        return;
+      }
+
+      try {
+        const subCollectionRef = collection(db, userId);
+        const snapshot = await getDocs(subCollectionRef);
+
+        let found = false;
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          const savedCode = data.code?.toString();
+          const restaurant = data.restaurant;
+
+          if (savedCode === codeInput) {
+            if (restaurant) {
+              window.location.href = `image.html?fook=${savedCode}`;
+            } else {
+              showToast("Restaurant name missing");
+            }
+            found = true;
+            return;
+          }
+        });
+
+        if (!found) {
+          showToast("Invalid code");
+        }
+
+      } catch (error) {
+        console.error("Firestore error:", error);
+        showToast("Error accessing Firestore");
+      }
+    };
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+  </script>
+</body>
+</html>
+
