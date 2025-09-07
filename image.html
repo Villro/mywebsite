@@ -121,28 +121,41 @@
         canvas.width = diameter;
         canvas.height = diameter;
 
-        // Calculate crop area (center square of image)
-        const minSide = Math.min(img.width, img.height);
-        const srcX = (img.width - minSide) / 2;
-        const srcY = (img.height - minSide) / 2;
-
         // Draw circular clip path
         ctx.beginPath();
         ctx.arc(diameter / 2, diameter / 2, diameter / 2, 0, Math.PI * 2);
         ctx.closePath();
         ctx.clip();
 
-        // Draw the centered square image into canvas
-        ctx.drawImage(img, srcX, srcY, minSide, minSide, 0, 0, diameter, diameter);
+        // Calculate scaling to fit whole image
+        const imgRatio = img.width / img.height;
+        let drawWidth, drawHeight, drawX, drawY;
+
+        if (imgRatio > 1) {
+          // Image is wider → Fit width
+          drawWidth = diameter;
+          drawHeight = diameter / imgRatio;
+          drawX = 0;
+          drawY = (diameter - drawHeight) / 2;
+        } else {
+          // Image is taller → Fit height
+          drawHeight = diameter;
+          drawWidth = diameter * imgRatio;
+          drawX = (diameter - drawWidth) / 2;
+          drawY = 0;
+        }
+
+        // Draw scaled image into the circle
+        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
 
         // Show circular preview
-        preview.src = canvas.toDataURL("image/png");  // Use PNG for transparency
+        preview.src = canvas.toDataURL("image/png");  // PNG for transparency
         preview.style.width = `${diameter}px`;
         preview.style.height = `${diameter}px`;
         preview.style.borderRadius = "50%";
         preview.classList.remove("hidden");
 
-        // Save circular cropped file for upload
+        // Save the properly fitted circular image for upload
         canvas.toBlob(blob => {
           fileInput.croppedFile = new File([blob], file.name, { type: "image/png" });
         }, "image/png");
@@ -152,6 +165,7 @@
     reader.readAsDataURL(file);
   }
 });
+
 
 
     // Upload cropped file
