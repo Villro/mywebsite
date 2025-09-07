@@ -108,7 +108,7 @@
     const fileInput = document.getElementById("fileInput");
     const preview = document.getElementById("preview");
 
-  fileInput.addEventListener("change", () => {
+ fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
@@ -120,6 +120,10 @@
         const ctx = canvas.getContext("2d");
         canvas.width = diameter;
         canvas.height = diameter;
+
+        // Fill background with light gray
+        ctx.fillStyle = "#f0f0f0";  // Light gray background
+        ctx.fillRect(0, 0, diameter, diameter);
 
         // Draw circular clip path
         ctx.beginPath();
@@ -145,7 +149,7 @@
           drawY = 0;
         }
 
-        // Draw scaled image into the circle
+        // Draw the scaled image into the circle
         ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
 
         // Show circular preview
@@ -155,7 +159,7 @@
         preview.style.borderRadius = "50%";
         preview.classList.remove("hidden");
 
-        // Save the properly fitted circular image for upload
+        // Save the circular image with background for upload
         canvas.toBlob(blob => {
           fileInput.croppedFile = new File([blob], file.name, { type: "image/png" });
         }, "image/png");
@@ -165,6 +169,7 @@
     reader.readAsDataURL(file);
   }
 });
+
 
 
 
