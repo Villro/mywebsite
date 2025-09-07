@@ -108,55 +108,44 @@
     const fileInput = document.getElementById("fileInput");
     const preview = document.getElementById("preview");
 
-    // Process image with canvas (crop to rectangle 300x200)
-  // Process image with canvas (fit into 300x200, minimal crop)
-// Process image with canvas (crop to rectangle 300x200)
-fileInput.addEventListener("change", () => {
+  fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
-        const targetWidth = 300;
-        const targetHeight = 200;
-
+        const diameter = 200;
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
+        canvas.width = diameter;
+        canvas.height = diameter;
 
-        // Calculate aspect ratios
-        const imgRatio = img.width / img.height;
-        const targetRatio = targetWidth / targetHeight;
+        // Calculate crop area (center square of image)
+        const minSide = Math.min(img.width, img.height);
+        const srcX = (img.width - minSide) / 2;
+        const srcY = (img.height - minSide) / 2;
 
-        let srcX, srcY, srcWidth, srcHeight;
+        // Draw circular clip path
+        ctx.beginPath();
+        ctx.arc(diameter / 2, diameter / 2, diameter / 2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
 
-        if (imgRatio > targetRatio) {
-          // Image is wider -> crop sides
-          srcHeight = img.height;
-          srcWidth = srcHeight * targetRatio;
-          srcX = (img.width - srcWidth) / 2;
-          srcY = 0;
-        } else {
-          // Image is taller -> crop top/bottom
-          srcWidth = img.width;
-          srcHeight = srcWidth / targetRatio;
-          srcX = 0;
-          srcY = (img.height - srcHeight) / 2;
-        }
+        // Draw the centered square image into canvas
+        ctx.drawImage(img, srcX, srcY, minSide, minSide, 0, 0, diameter, diameter);
 
-        // Draw cropped portion into canvas
-        ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, targetWidth, targetHeight);
-
-        // Show preview
-        preview.src = canvas.toDataURL("image/jpeg");
+        // Show circular preview
+        preview.src = canvas.toDataURL("image/png");  // Use PNG for transparency
+        preview.style.width = `${diameter}px`;
+        preview.style.height = `${diameter}px`;
+        preview.style.borderRadius = "50%";
         preview.classList.remove("hidden");
 
-        // Save cropped file for upload
+        // Save circular cropped file for upload
         canvas.toBlob(blob => {
-          fileInput.croppedFile = new File([blob], file.name, { type: "image/jpeg" });
-        }, "image/jpeg");
+          fileInput.croppedFile = new File([blob], file.name, { type: "image/png" });
+        }, "image/png");
       };
       img.src = e.target.result;
     };
