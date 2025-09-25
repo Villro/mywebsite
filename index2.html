@@ -16,7 +16,6 @@
       overflow-y: auto;
     }
 
-    /* Fade-in animation */
     @keyframes fadeInUp {
       0% { opacity: 0; transform: translateY(30px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -26,7 +25,6 @@
       animation: fadeInUp 0.8s ease forwards;
     }
 
-    /* Toast styling */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -77,22 +75,25 @@
   <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
+    // ✅ villroconnection config
     const firebaseConfig = {
-      apiKey: "AIzaSyApKZcE9n07a5ct8abRcNGj0sw0h1G9fwY",
-      authDomain: "myvillro.firebaseapp.com",
-      projectId: "myvillro",
-      storageBucket: "myvillro.firebasestorage.app",
-      messagingSenderId: "277825963335",
-      appId: "1:277825963335:web:c7b3dcfdf7be337cba7862",
-      measurementId: "G-86BMPBED29"
+      apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
+      authDomain: "villroconnection.firebaseapp.com",
+      databaseURL: "https://villroconnection.firebaseio.com",
+      projectId: "villroconnection",
+      storageBucket: "villroconnection.appspot.com",
+      messagingSenderId: "672876428963",
+      appId: "1:672876428963:web:00cd0cc83b1e3a17760916",
+      measurementId: "G-7C09TXDJGR"
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const db = getDatabase(app);
 
-    const userId = "Image_Get"; // Replace with actual userId if needed
+    // Root node in your DB where codes are stored
+    const CODE_COLLECTION = "Image_Get";
 
     window.checkCode = async function() {
       const codeInput = document.getElementById("codeInput").value.trim();
@@ -102,23 +103,28 @@
       }
 
       try {
-        const subCollectionRef = collection(db, userId);
-        const snapshot = await getDocs(subCollectionRef);
+        // Read all entries under Image_Get
+        const snapshot = await get(ref(db, CODE_COLLECTION));
+
+        if (!snapshot.exists()) {
+          showToast("No codes found in DB");
+          return;
+        }
 
         let found = false;
-        snapshot.forEach(docSnap => {
-          const data = docSnap.data();
+        snapshot.forEach(childSnap => {
+          const data = childSnap.val();
           const savedCode = data.code?.toString();
           const restaurant = data.user_id;
 
           if (savedCode === codeInput) {
             if (restaurant) {
+              // Redirect to image.html with ?fook=restaurant
               window.location.href = `image.html?fook=${restaurant}`;
             } else {
-              showToast("Restaurant name missing");
+              showToast("Restaurant ID missing");
             }
             found = true;
-            return;
           }
         });
 
@@ -127,8 +133,8 @@
         }
 
       } catch (error) {
-        console.error("Firestore error:", error);
-        showToast("Error accessing Firestore");
+        console.error("Realtime DB error:", error);
+        showToast("Error accessing Firebase");
       }
     };
 
@@ -141,4 +147,3 @@
   </script>
 </body>
 </html>
-
