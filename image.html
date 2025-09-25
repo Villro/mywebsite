@@ -147,37 +147,41 @@
       }
     };
 
-    function displayMedia(url) {
-      mediaContainer.innerHTML = ""; // clear old
+  function displayMedia(url) {
+  mediaContainer.innerHTML = ""; // clear old
 
-      // Detect file type
-      if (url.match(/\.(jpeg|jpg|png|gif)$/i)) {
-        const img = document.createElement("img");
-        img.src = url;
-        img.className = "mx-auto rounded-xl shadow-md mb-2";
-        img.style.width = "300px";
-        mediaContainer.appendChild(img);
-      } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
-        const video = document.createElement("video");
-        video.src = url;
-        video.controls = true;
-        video.className = "mx-auto rounded-xl shadow-md mb-2";
-        video.style.width = "300px";
-        mediaContainer.appendChild(video);
-      } else {
-        const p = document.createElement("p");
-        p.textContent = "Unknown file type: " + url;
-        mediaContainer.appendChild(p);
-      }
+  // Remove query params (?alt=media...)
+  const cleanUrl = url.split("?")[0].toLowerCase();
 
-      // Download button
-      const downloadBtn = document.createElement("a");
-      downloadBtn.href = url;
-      downloadBtn.download = "media";
-      downloadBtn.textContent = "Download to Gallery";
-      downloadBtn.className = "bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md inline-block mt-2";
-      mediaContainer.appendChild(downloadBtn);
-    }
+  // Detect file type
+  if (cleanUrl.endsWith(".jpeg") || cleanUrl.endsWith(".jpg") || cleanUrl.endsWith(".png") || cleanUrl.endsWith(".gif")) {
+    const img = document.createElement("img");
+    img.src = url;
+    img.className = "mx-auto rounded-xl shadow-md mb-2";
+    img.style.width = "300px";
+    mediaContainer.appendChild(img);
+  } else if (cleanUrl.endsWith(".mp4") || cleanUrl.endsWith(".webm") || cleanUrl.endsWith(".ogg")) {
+    const video = document.createElement("video");
+    video.src = url;
+    video.controls = true;
+    video.className = "mx-auto rounded-xl shadow-md mb-2";
+    video.style.width = "300px";
+    mediaContainer.appendChild(video);
+  } else {
+    const p = document.createElement("p");
+    p.textContent = "Unknown file type: " + url;
+    mediaContainer.appendChild(p);
+  }
+
+  // Download button
+  const downloadBtn = document.createElement("a");
+  downloadBtn.href = url;
+  downloadBtn.download = "media";
+  downloadBtn.textContent = "Download to Gallery";
+  downloadBtn.className = "bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md inline-block mt-2";
+  mediaContainer.appendChild(downloadBtn);
+}
+
 
     function showToast(message) {
       const toast = document.getElementById("toast");
