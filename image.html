@@ -14,8 +14,6 @@
       background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
       min-height: 100vh;
     }
-
-    /* Toast styling */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -45,7 +43,6 @@
       class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
     />
 
-    <!-- Fixed rectangular preview -->
     <img id="preview" 
          class="mx-auto mb-4 hidden object-cover rounded-xl" 
          alt="Preview"
@@ -61,17 +58,16 @@
     <p class="text-sm text-gray-500 mt-6">Your photo will be securely stored</p>
   </div>
 
-  <!-- Toast -->
   <div id="toast" class="toast"></div>
 
   <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+    import { getDatabase, ref as dbRef, set, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-    // 🔹 Config for STORAGE (villroconnection project)
-    const storageConfig = {
+    // ✅ Single config for villroconnection (Storage + Realtime Database)
+    const firebaseConfig = {
       apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
       authDomain: "villroconnection.firebaseapp.com",
       databaseURL: "https://villroconnection.firebaseio.com",
@@ -82,98 +78,73 @@
       measurementId: "G-7C09TXDJGR"
     };
 
-    // 🔹 Config for FIRESTORE (myvillro project)
-    const firestoreConfig = {
-      apiKey: "AIzaSyApKZcE9n07a5ct8abRcNGj0sw0h1G9fwY",
-      authDomain: "myvillro.firebaseapp.com",
-      projectId: "myvillro",
-      storageBucket: "myvillro.appspot.com",
-      messagingSenderId: "277825963335",
-      appId: "1:277825963335:web:c7b3dcfdf7be337cba7862",
-      measurementId: "G-86BMPBED29"
-    };
-
-    // Initialize two apps
-    const appStorage = initializeApp(storageConfig, "app-storage");
-    const appFirestore = initializeApp(firestoreConfig, "app-firestore");
-
-    // Get services
-    const storage = getStorage(appStorage, "gs://villroconnection.appspot.com");
-    const db = getFirestore(appFirestore);
+    // Init app
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+    const database = getDatabase(app);
 
     // Get uid/code from query string
     const urlParams = new URLSearchParams(window.location.search);
-    const uid = urlParams.get("fook");
+    const uid = urlParams.get("fook"); // example: ?fook=12345
 
     const fileInput = document.getElementById("fileInput");
     const preview = document.getElementById("preview");
 
- fileInput.addEventListener("change", () => {
-  const file = fileInput.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        const diameter = 200;
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = diameter;
-        canvas.height = diameter;
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const diameter = 200;
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = diameter;
+            canvas.height = diameter;
 
-        // Fill background with light gray
-        ctx.fillStyle = "#f0f0f0";  // Light gray background
-        ctx.fillRect(0, 0, diameter, diameter);
+            ctx.fillStyle = "#f0f0f0";
+            ctx.fillRect(0, 0, diameter, diameter);
 
-        // Draw circular clip path
-        ctx.beginPath();
-        ctx.arc(diameter / 2, diameter / 2, diameter / 2, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.clip();
+            ctx.beginPath();
+            ctx.arc(diameter / 2, diameter / 2, diameter / 2, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
 
-        // Calculate scaling to fit whole image
-        const imgRatio = img.width / img.height;
-        let drawWidth, drawHeight, drawX, drawY;
+            const imgRatio = img.width / img.height;
+            let drawWidth, drawHeight, drawX, drawY;
 
-        if (imgRatio > 1) {
-          // Image is wider → Fit width
-          drawWidth = diameter;
-          drawHeight = diameter / imgRatio;
-          drawX = 0;
-          drawY = (diameter - drawHeight) / 2;
-        } else {
-          // Image is taller → Fit height
-          drawHeight = diameter;
-          drawWidth = diameter * imgRatio;
-          drawX = (diameter - drawWidth) / 2;
-          drawY = 0;
-        }
+            if (imgRatio > 1) {
+              drawWidth = diameter;
+              drawHeight = diameter / imgRatio;
+              drawX = 0;
+              drawY = (diameter - drawHeight) / 2;
+            } else {
+              drawHeight = diameter;
+              drawWidth = diameter * imgRatio;
+              drawX = (diameter - drawWidth) / 2;
+              drawY = 0;
+            }
 
-        // Draw the scaled image into the circle
-        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+            ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
 
-        // Show circular preview
-        preview.src = canvas.toDataURL("image/png");  // PNG for transparency
-        preview.style.width = `${diameter}px`;
-        preview.style.height = `${diameter}px`;
-        preview.style.borderRadius = "50%";
-        preview.classList.remove("hidden");
+            preview.src = canvas.toDataURL("image/png");
+            preview.style.width = `${diameter}px`;
+            preview.style.height = `${diameter}px`;
+            preview.style.borderRadius = "50%";
+            preview.classList.remove("hidden");
 
-        // Save the circular image with background for upload
-        canvas.toBlob(blob => {
-          fileInput.croppedFile = new File([blob], file.name, { type: "image/png" });
-        }, "image/png");
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-});
+            canvas.toBlob(blob => {
+              fileInput.croppedFile = new File([blob], file.name, { type: "image/png" });
+            }, "image/png");
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
-
-
-
-    // Upload cropped file
+    // Upload
     window.uploadImage = async function() {
       const file = fileInput.croppedFile || fileInput.files[0];
       if (!file) {
@@ -182,18 +153,19 @@
       }
 
       try {
-        // Upload to Storage (villroconnection)
-        const storageRef = ref(storage, `customer_images/${file.name}`);
+        // Upload to Firebase Storage
+        const storageRef = ref(storage, `customer_images/${uid}_${file.name}`);
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
 
-        // Save URL in Firestore (myvillro)
-        await setDoc(doc(db, "Customer_Details", uid), { image: downloadURL }, { merge: true });
+        // Save URL in Firebase Realtime Database
+        const userRef = dbRef(database, "Customer_Details/" + uid);
+        await update(userRef, { image: downloadURL });
 
         showToast("Image uploaded & URL saved successfully!");
       } catch (error) {
         console.error("Upload error:", error);
-        showToast("Upload failed"+ error)
+        showToast("Upload failed: " + error.message);
       }
     };
 
