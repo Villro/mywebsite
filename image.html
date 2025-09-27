@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Upload & Fixed Crop Image</title>
 
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
 <style>
@@ -39,11 +38,12 @@
     background: #fff;
     border-radius: 1rem;
     overflow: hidden;
+    position: relative;
   }
   #preview {
     width: 100%;
-    display: block;
     height: 100%;
+    display: block;
   }
 </style>
 </head>
@@ -100,26 +100,25 @@
     reader.onload = e => {
       preview.src = e.target.result;
 
-      // Destroy previous cropper if exists
       if (cropper) cropper.destroy();
       cropper = new Cropper(preview, {
-        aspectRatio: 1,            // Square crop
+        aspectRatio: 1,              // Square
         viewMode: 1,
-        autoCropArea: 1,           // Full image
-        movable: true,             // Move image inside crop box
-        zoomable: true,            // Zoom image
+        autoCropArea: 1,
+        movable: true,               // Move image
+        zoomable: true,              // Zoom image
         background: false,
-        resizable: false,          // Crop box cannot be resized
-        minCropBoxWidth: 512,      // Fixed crop box width
-        minCropBoxHeight: 512,     // Fixed crop box height
+        cropBoxMovable: false,       // Crop box cannot move
+        cropBoxResizable: false,     // Crop box cannot resize
+        minCropBoxWidth: 512,        // Fixed 512x512
+        minCropBoxHeight: 512,
         ready() {
-          // Force crop box to exact 512x512
-          const cropBoxData = cropper.getCropBoxData();
-          cropper.setCropBoxData({ 
-            left: cropBoxData.left,
-            top: cropBoxData.top,
+          // Ensure crop box is exactly 512x512
+          cropper.setCropBoxData({
             width: 512,
-            height: 512
+            height: 512,
+            left: (preview.parentElement.offsetWidth - 512) / 2,
+            top: (preview.parentElement.offsetHeight - 512) / 2
           });
         }
       });
