@@ -4,57 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Upload, Crop & Fetch Media</title>
-
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-    min-height: 100vh;
-  }
-  .toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.85);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-    z-index: 1000;
-  }
-  .toast.show { opacity: 1; pointer-events: auto; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  min-height: 100vh;
+}
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 1000;
+}
+.toast.show { opacity: 1; pointer-events: auto; }
 
-  #previewContainer {
-    width: 100%;
-    max-width: 100%;
-    height: 400px;
-    margin: 0 auto 1rem auto;
-    background: #fff;
-    border-radius: 1rem;
-    overflow: hidden;
-    position: relative;
-  }
-  #preview {
-    width: 100%;
-    height: 100%;
-    display: block;
-    touch-action: none;
-  }
+#previewContainer {
+  width: 100%;
+  max-width: 100%;
+  height: 400px;
+  margin: 0 auto 1rem auto;
+  background: #fff;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+#preview {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
 </style>
 </head>
 <body class="flex items-center justify-center px-4 py-10">
 
 <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md text-center">
   <h1 class="text-3xl font-bold text-blue-500 mb-6">Upload & Crop Photo</h1>
-
   <input type="file" id="fileInput" accept="image/*" class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"/>
-
   <div id="previewContainer">
     <img id="preview" />
   </div>
@@ -78,6 +74,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebas
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
 import { getDatabase, ref as dbRef, update, get, child } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
   authDomain: "villroconnection.firebaseapp.com",
@@ -88,7 +85,6 @@ const firebaseConfig = {
   appId: "1:672876428963:web:00cd0cc83b1e3a17760916",
   measurementId: "G-7C09TXDJGR"
 };
-
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const database = getDatabase(app);
@@ -101,6 +97,7 @@ const preview = document.getElementById("preview");
 const mediaContainer = document.getElementById("mediaContainer");
 let cropper;
 
+// Initialize Cropper
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (!file) return;
@@ -109,7 +106,7 @@ fileInput.addEventListener("change", () => {
   reader.onload = e => {
     preview.src = e.target.result;
 
-    if(cropper) cropper.destroy();
+    if (cropper) cropper.destroy();
     cropper = new Cropper(preview, {
       aspectRatio: 1,
       viewMode: 1,
@@ -135,54 +132,38 @@ fileInput.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
-// Crop & Upload
+// Crop & upload
 async function cropAndUpload() {
   if (!cropper) { showToast("Please select an image first"); return; }
 
-  const canvas = cropper.getCroppedCanvas({
-    width: 512,
-    height: 512,
-    imageSmoothingQuality: "high"
-  });
-
+  const canvas = cropper.getCroppedCanvas({ width: 512, height: 512, imageSmoothingQuality: "high" });
   if (!canvas) { showToast("Failed to get cropped image"); return; }
 
   canvas.toBlob(async blob => {
     if (!blob) { showToast("Failed to create image blob"); return; }
-
     try {
-      const storageRef = ref(storage, `customer_images/${uid}_${Date.now()}.png`);
+      const filename = `customer_images/${uid}_${Date.now()}.png`;
+      const storageRef = ref(storage, filename);
       await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
 
       const userRef = dbRef(database, "Customer_Details/" + uid);
       await update(userRef, { image: downloadURL, media: downloadURL });
 
-      // Force toast to show
-      const toast = document.getElementById("toast");
-      toast.textContent = "Image cropped & uploaded successfully!";
-      toast.classList.add("show");
-
-      // Remove and reset after 3s
-      setTimeout(() => {
-        toast.classList.remove("show");
-        toast.textContent = "";
-      }, 3000);
-
+      showToast("Image cropped & uploaded successfully!");
+      preview.src = downloadURL; // show uploaded image
     } catch(err) {
       showToast("Upload failed: " + err.message);
     }
   }, "image/png", 1);
 }
 
-
-// Fetch & show media
+// Fetch media
 async function fetchMedia() {
   try {
     const snapshot = await get(child(dbRef(database), "Customer_Details/" + uid + "/media"));
     if(snapshot.exists()) {
-      const url = snapshot.val();
-      displayMedia(url);
+      displayMedia(snapshot.val());
     } else {
       showToast("No media found for this user");
     }
@@ -194,7 +175,6 @@ async function fetchMedia() {
 function displayMedia(url) {
   mediaContainer.innerHTML = "";
   const cleanUrl = url.split("?")[0].toLowerCase();
-
   if(cleanUrl.match(/\.(jpeg|jpg|png|gif)$/)) {
     const img = document.createElement("img");
     img.src = url;
@@ -214,7 +194,6 @@ function displayMedia(url) {
     mediaContainer.appendChild(p);
   }
 
-  // Download button
   const downloadBtn = document.createElement("a");
   downloadBtn.href = url;
   downloadBtn.target = "_blank";
@@ -223,13 +202,12 @@ function displayMedia(url) {
   mediaContainer.appendChild(downloadBtn);
 }
 
-function showToast(message) {
+function showToast(msg) {
   const toast = document.getElementById("toast");
-  toast.textContent = message;
+  toast.textContent = msg;
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 3000);
 }
 </script>
-
 </body>
 </html>
