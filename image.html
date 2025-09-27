@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upload & Fixed Crop Image</title>
+<title>Upload & Move Crop Box</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-<link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
 <style>
   body {
     font-family: 'Poppins', sans-serif;
@@ -44,13 +44,14 @@
     width: 100%;
     height: 100%;
     display: block;
+    touch-action: none;
   }
 </style>
 </head>
 <body class="flex items-center justify-center px-4 py-10">
 
 <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md text-center">
-  <h1 class="text-3xl font-bold text-blue-500 mb-6">Upload & Crop Photo</h1>
+  <h1 class="text-3xl font-bold text-blue-500 mb-6">Upload & Move Crop Box</h1>
 
   <input type="file" id="fileInput" accept="image/*" class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"/>
 
@@ -102,23 +103,23 @@
 
       if (cropper) cropper.destroy();
       cropper = new Cropper(preview, {
-        aspectRatio: 1,              // Square
+        aspectRatio: 1,
         viewMode: 1,
         autoCropArea: 1,
-        movable: true,               // Move image
-        zoomable: true,              // Zoom image
+        movable: false,              // Image does NOT move
+        zoomable: false,             // No zoom
         background: false,
-        cropBoxMovable: false,       // Crop box cannot move
-        cropBoxResizable: false,     // Crop box cannot resize
-        minCropBoxWidth: 512,        // Fixed 512x512
+        cropBoxMovable: true,        // Crop box CAN move smoothly
+        cropBoxResizable: false,     // Crop box size fixed
+        minCropBoxWidth: 512,
         minCropBoxHeight: 512,
         ready() {
-          // Ensure crop box is exactly 512x512
+          const container = preview.parentElement;
           cropper.setCropBoxData({
             width: 512,
             height: 512,
-            left: (preview.parentElement.offsetWidth - 512) / 2,
-            top: (preview.parentElement.offsetHeight - 512) / 2
+            left: (container.offsetWidth - 512) / 2,
+            top: (container.offsetHeight - 512) / 2
           });
         }
       });
