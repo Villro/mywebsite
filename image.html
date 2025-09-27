@@ -145,7 +145,11 @@ async function cropAndUpload() {
     imageSmoothingQuality: "high"
   });
 
+  if (!canvas) { showToast("Failed to get cropped image"); return; }
+
   canvas.toBlob(async blob => {
+    if (!blob) { showToast("Failed to create image blob"); return; }
+
     try {
       const storageRef = ref(storage, `customer_images/${uid}_${Date.now()}.png`);
       await uploadBytes(storageRef, blob);
@@ -154,12 +158,23 @@ async function cropAndUpload() {
       const userRef = dbRef(database, "Customer_Details/" + uid);
       await update(userRef, { image: downloadURL, media: downloadURL });
 
-      showToast("Image cropped & uploaded successfully!");
+      // Force toast to show
+      const toast = document.getElementById("toast");
+      toast.textContent = "Image cropped & uploaded successfully!";
+      toast.classList.add("show");
+
+      // Remove and reset after 3s
+      setTimeout(() => {
+        toast.classList.remove("show");
+        toast.textContent = "";
+      }, 3000);
+
     } catch(err) {
       showToast("Upload failed: " + err.message);
     }
   }, "image/png", 1);
 }
+
 
 // Fetch & show media
 async function fetchMedia() {
