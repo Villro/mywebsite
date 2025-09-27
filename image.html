@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,6 +7,7 @@
   <title>Upload & Fetch Media</title>
 
   <!-- Tailwind CSS -->
+
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -29,49 +31,70 @@
       z-index: 1000;
     }
     .toast.show { opacity: 1; pointer-events: auto; }
+
+    /* Cropper style */
+    .crop-box {
+      width: 512px;
+      height: 512px;
+      overflow: hidden;
+      border-radius: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+    }
+    .crop-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* crops instead of stretch */
+    }
   </style>
+
 </head>
 <body class="flex items-center justify-center px-4 py-10">
 
   <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
     <h1 class="text-3xl font-bold text-blue-500 mb-6">Upload Your Photo</h1>
 
-    <input 
-      type="file" 
-      id="fileInput" 
-      accept="image/*"
-      class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
-    />
+```
+<input 
+  type="file" 
+  id="fileInput" 
+  accept="image/*"
+  class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
+/>
 
-    <img id="preview" 
-         class="mx-auto mb-4 hidden object-cover rounded-xl" 
-         alt="Preview"
-         style="width:300px; height:200px;" />
+<!-- Preview container -->
+<div id="previewContainer" class="crop-box mx-auto mb-4 hidden">
+  <img id="preview" alt="Preview" />
+</div>
 
-    <button 
-      onclick="uploadImage()" 
-      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4"
-    >
-      Upload & Save
-    </button>
+<button 
+  onclick="uploadImage()" 
+  class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4"
+>
+  Upload & Save
+</button>
 
-    <!-- New button to fetch media -->
-    <button 
-      onclick="fetchMedia()" 
-      class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4"
-    >
-      Fetch & Show Media
-    </button>
+<button 
+  onclick="fetchMedia()" 
+  class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4"
+>
+  Fetch & Show Media
+</button>
 
-    <!-- Container for fetched media -->
-    <div id="mediaContainer" class="mt-4"></div>
+<!-- Container for fetched media -->
+<div id="mediaContainer" class="mt-4"></div>
 
-    <p class="text-sm text-gray-500 mt-6">Your photo/video will be securely stored</p>
+<p class="text-sm text-gray-500 mt-6">Your photo/video will be securely stored</p>
+```
+
   </div>
 
   <div id="toast" class="toast"></div>
 
   <!-- Firebase SDK -->
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
@@ -97,6 +120,7 @@
 
     const fileInput = document.getElementById("fileInput");
     const preview = document.getElementById("preview");
+    const previewContainer = document.getElementById("previewContainer");
     const mediaContainer = document.getElementById("mediaContainer");
 
     fileInput.addEventListener("change", () => {
@@ -105,7 +129,7 @@
         const reader = new FileReader();
         reader.onload = e => {
           preview.src = e.target.result;
-          preview.classList.remove("hidden");
+          previewContainer.classList.remove("hidden");
         };
         reader.readAsDataURL(file);
       }
@@ -132,7 +156,7 @@
       }
     };
 
-    // Fetch media (image or video) from DB
+    // Fetch media (image or video)
     window.fetchMedia = async function() {
       try {
         const snapshot = await get(child(dbRef(database), "Customer_Details/" + uid + "/media"));
@@ -147,44 +171,39 @@
       }
     };
 
- function displayMedia(url) {
-  mediaContainer.innerHTML = ""; // clear old
+    function displayMedia(url) {
+      mediaContainer.innerHTML = "";
 
-  // Remove query params (?alt=media...)
-  const cleanUrl = url.split("?")[0].toLowerCase();
+      const cleanUrl = url.split("?")[0].toLowerCase();
 
-  // Detect file type
-  if (cleanUrl.endsWith(".jpeg") || cleanUrl.endsWith(".jpg") || cleanUrl.endsWith(".png") || cleanUrl.endsWith(".gif")) {
-    const img = document.createElement("img");
-    img.src = url;
-    img.className = "mx-auto rounded-xl shadow-md mb-2";
-    img.style.width = "300px";
-    mediaContainer.appendChild(img);
-  } else if (cleanUrl.endsWith(".mp4") || cleanUrl.endsWith(".webm") || cleanUrl.endsWith(".ogg")) {
-    const video = document.createElement("video");
-    video.src = url;
-    video.controls = true;
-    video.className = "mx-auto rounded-xl shadow-md mb-2";
-    video.style.width = "300px";
-    mediaContainer.appendChild(video);
-  } else {
-    const p = document.createElement("p");
-    p.textContent = "Unknown file type: " + url;
-    mediaContainer.appendChild(p);
-  }
+      if (cleanUrl.match(/\.(jpeg|jpg|png|gif)$/)) {
+        const box = document.createElement("div");
+        box.className = "crop-box mx-auto mb-4";
+        const img = document.createElement("img");
+        img.src = url;
+        box.appendChild(img);
+        mediaContainer.appendChild(box);
+      } else if (cleanUrl.match(/\.(mp4|webm|ogg)$/)) {
+        const video = document.createElement("video");
+        video.src = url;
+        video.controls = true;
+        video.className = "mx-auto rounded-xl shadow-md mb-2";
+        video.style.width = "300px";
+        mediaContainer.appendChild(video);
+      } else {
+        const p = document.createElement("p");
+        p.textContent = "Unknown file type: " + url;
+        mediaContainer.appendChild(p);
+      }
 
-  // Direct download button
- // Direct download button (open in new tab)
-const downloadBtn = document.createElement("a");
-downloadBtn.href = url;
-downloadBtn.target = "_blank"; // open in new tab
-downloadBtn.textContent = "Download to Gallery";
-downloadBtn.className = "bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md inline-block mt-2";
-mediaContainer.appendChild(downloadBtn);
-
-}
-
-
+      // Download button
+      const downloadBtn = document.createElement("a");
+      downloadBtn.href = url;
+      downloadBtn.target = "_blank";
+      downloadBtn.textContent = "Download to Gallery";
+      downloadBtn.className = "bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md inline-block mt-2";
+      mediaContainer.appendChild(downloadBtn);
+    }
 
     function showToast(message) {
       const toast = document.getElementById("toast");
@@ -193,5 +212,6 @@ mediaContainer.appendChild(downloadBtn);
       setTimeout(() => toast.classList.remove("show"), 3000);
     }
   </script>
+
 </body>
 </html>
