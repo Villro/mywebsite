@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,7 +6,6 @@
   <title>Upload & Fetch Media</title>
 
   <!-- Tailwind CSS -->
-
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -34,67 +32,63 @@
 
     /* Cropper style */
     .crop-box {
-      width: 512px;
-      height: 512px;
+      width: 300px;
+      height: 300px;
       overflow: hidden;
       border-radius: 1rem;
       display: flex;
       justify-content: center;
       align-items: center;
       background: #fff;
+      margin: 0 auto 1rem auto;
     }
     .crop-box img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* crops instead of stretch */
+      object-fit: cover; /* visual crop */
     }
   </style>
-
 </head>
 <body class="flex items-center justify-center px-4 py-10">
 
   <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
     <h1 class="text-3xl font-bold text-blue-500 mb-6">Upload Your Photo</h1>
 
-```
-<input 
-  type="file" 
-  id="fileInput" 
-  accept="image/*"
-  class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
-/>
+    <input 
+      type="file" 
+      id="fileInput" 
+      accept="image/*"
+      class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
+    />
 
-<!-- Preview container -->
-<div id="previewContainer" class="crop-box mx-auto mb-4 hidden">
-  <img id="preview" alt="Preview" />
-</div>
+    <!-- Preview container -->
+    <div id="previewContainer" class="crop-box hidden">
+      <img id="preview" alt="Preview" />
+    </div>
 
-<button 
-  onclick="uploadImage()" 
-  class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4"
->
-  Upload & Save
-</button>
+    <button 
+      onclick="uploadImage()" 
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4"
+    >
+      Upload & Save
+    </button>
 
-<button 
-  onclick="fetchMedia()" 
-  class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4"
->
-  Fetch & Show Media
-</button>
+    <button 
+      onclick="fetchMedia()" 
+      class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4"
+    >
+      Fetch & Show Media
+    </button>
 
-<!-- Container for fetched media -->
-<div id="mediaContainer" class="mt-4"></div>
+    <!-- Container for fetched media -->
+    <div id="mediaContainer" class="mt-4"></div>
 
-<p class="text-sm text-gray-500 mt-6">Your photo/video will be securely stored</p>
-```
-
+    <p class="text-sm text-gray-500 mt-6">Your photo/video will be securely stored</p>
   </div>
 
   <div id="toast" class="toast"></div>
 
   <!-- Firebase SDK -->
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
@@ -125,25 +119,46 @@
 
     fileInput.addEventListener("change", () => {
       const file = fileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          preview.src = e.target.result;
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          // Crop center square
+          const canvas = document.createElement("canvas");
+          const cropSize = 512;
+          canvas.width = cropSize;
+          canvas.height = cropSize;
+          const ctx = canvas.getContext("2d");
+
+          const minSide = Math.min(img.width, img.height);
+          const sx = (img.width - minSide) / 2;
+          const sy = (img.height - minSide) / 2;
+
+          ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, cropSize, cropSize);
+
+          // Update preview
+          preview.src = canvas.toDataURL("image/png");
           previewContainer.classList.remove("hidden");
+
+          // Store cropped file for upload
+          canvas.toBlob(blob => {
+            fileInput.croppedFile = blob;
+          }, "image/png", 1);
         };
-        reader.readAsDataURL(file);
-      }
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     });
 
     // Upload image
     window.uploadImage = async function() {
-      const file = fileInput.files[0];
-      if (!file) {
-        showToast("Please select an image first");
-        return;
-      }
+      const file = fileInput.croppedFile || fileInput.files[0];
+      if (!file) { showToast("Please select an image first"); return; }
+
       try {
-        const storageRef = ref(storage, `customer_images/${uid}_${file.name}`);
+        const storageRef = ref(storage, `customer_images/${uid}_${file.name || "cropped.png"}`);
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
 
