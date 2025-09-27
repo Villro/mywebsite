@@ -1,217 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload & Fetch Media</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload, Crop & Fetch Media</title>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Cropper.js CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+<!-- Cropper.js CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
 
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-      min-height: 100vh;
-    }
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.85);
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      z-index: 1000;
-    }
-    .toast.show { opacity: 1; pointer-events: auto; }
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  min-height: 100vh;
+}
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 1000;
+}
+.toast.show { opacity: 1; pointer-events: auto; }
 
-    #preview {
-      max-width: 100%;
-      display: block;
-      margin: 0 auto 1rem auto;
-    }
-  </style>
+#preview {
+  width: 300px;
+  height: 300px;
+  display: block;
+  margin: 0 auto 1rem auto;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+</style>
+
+<!-- Cropper.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
 <body class="flex items-center justify-center px-4 py-10">
 
-  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
-    <h1 class="text-3xl font-bold text-blue-500 mb-6">Upload Your Photo</h1>
+<div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
+  <h1 class="text-3xl font-bold text-blue-500 mb-6">Upload, Crop & Save</h1>
 
-    <input 
-      type="file" 
-      id="fileInput" 
-      accept="image/*"
-      class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
-    />
+  <input type="file" id="fileInput" accept="image/*"
+         class="mb-4 block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer focus:outline-none" />
 
-    <img id="preview" class="mx-auto mb-4 hidden object-cover rounded-xl" alt="Preview" style="width:300px; height:200px;" />
+  <img id="preview" class="hidden" alt="Preview">
 
-    <button id="uploadBtn" 
-      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4">
-      Upload & Save
-    </button>
+  <button onclick="cropAndUpload()"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md mt-2 w-full mb-2">
+    Crop & Upload
+  </button>
 
-    <button id="fetchBtn" 
-      class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transform hover:scale-105 transition-all duration-200 mb-4">
-      Fetch & Show Media
-    </button>
+  <button onclick="fetchMedia()"
+          class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md mt-2 w-full mb-4">
+    Fetch & Show Media
+  </button>
 
-    <div id="mediaContainer" class="mt-4"></div>
+  <div id="mediaContainer" class="mt-4"></div>
+</div>
 
-    <p class="text-sm text-gray-500 mt-6">Your photo/video will be securely stored</p>
-  </div>
+<div id="toast" class="toast"></div>
 
-  <div id="toast" class="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+import { getDatabase, ref as dbRef, update, get, child } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
-    import { getDatabase, ref as dbRef, update, get, child } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
+  authDomain: "villroconnection.firebaseapp.com",
+  databaseURL: "https://villroconnection.firebaseio.com",
+  projectId: "villroconnection",
+  storageBucket: "villroconnection.appspot.com",
+  messagingSenderId: "672876428963",
+  appId: "1:672876428963:web:00cd0cc83b1e3a17760916",
+  measurementId: "G-7C09TXDJGR"
+};
 
-    // Cropper.js
-    import Cropper from "https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.esm.js";
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+const database = getDatabase(app);
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
-      authDomain: "villroconnection.firebaseapp.com",
-      databaseURL: "https://villroconnection.firebaseio.com",
-      projectId: "villroconnection",
-      storageBucket: "villroconnection.appspot.com",
-      messagingSenderId: "672876428963",
-      appId: "1:672876428963:web:00cd0cc83b1e3a17760916",
-      measurementId: "G-7C09TXDJGR"
+const urlParams = new URLSearchParams(window.location.search);
+const uid = urlParams.get("fook");
+
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const mediaContainer = document.getElementById("mediaContainer");
+
+let cropper;
+
+// File change -> show preview + initialize cropper
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    preview.src = e.target.result;
+    preview.classList.remove("hidden");
+
+    preview.onload = () => {
+      if(cropper) cropper.destroy();
+      cropper = new Cropper(preview, {
+        aspectRatio: 1,
+        viewMode: 1,
+        autoCropArea: 1,
+        movable: true,
+        zoomable: true,
+        background: false,
+        cropBoxMovable: true,
+        cropBoxResizable: false,
+        minCropBoxWidth: 512,
+        minCropBoxHeight: 512,
+      });
     };
+  };
+  reader.readAsDataURL(file);
+});
 
-    const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
-    const database = getDatabase(app);
+// Crop & Upload
+async function cropAndUpload() {
+  if (!cropper) { showToast("Please select an image first"); return; }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const uid = urlParams.get("fook") || "demo_user";
+  const canvas = cropper.getCroppedCanvas({ width: 512, height: 512, imageSmoothingQuality: "high" });
+  if (!canvas) { showToast("Failed to get cropped image"); return; }
 
-    const fileInput = document.getElementById("fileInput");
-    const preview = document.getElementById("preview");
-    const mediaContainer = document.getElementById("mediaContainer");
-    const uploadBtn = document.getElementById("uploadBtn");
-    const fetchBtn = document.getElementById("fetchBtn");
-    const toast = document.getElementById("toast");
+  canvas.toBlob(async blob => {
+    if (!blob) { showToast("Failed to create image blob"); return; }
 
-    let cropper;
+    try {
+      const storageRef = ref(storage, `customer_images/${uid}_${Date.now()}.png`);
+      await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef);
 
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files[0];
-      if (!file) return;
+      const userRef = dbRef(database, "Customer_Details/" + uid);
+      await update(userRef, { image: downloadURL, media: downloadURL });
 
-      const reader = new FileReader();
-      reader.onload = e => {
-        preview.src = e.target.result;
-        preview.classList.remove("hidden");
-
-        preview.onload = () => {
-          if (cropper) cropper.destroy();
-          cropper = new Cropper(preview, {
-            aspectRatio: 1,
-            viewMode: 1,
-            autoCropArea: 1,
-            movable: true,
-            zoomable: true,
-            background: false,
-            cropBoxMovable: true,
-            cropBoxResizable: false,
-            minCropBoxWidth: 512,
-            minCropBoxHeight: 512,
-          });
-        };
-      };
-      reader.readAsDataURL(file);
-    });
-
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 3000);
+      showToast("Image cropped & uploaded successfully!");
+    } catch(err) {
+      showToast("Upload failed: " + err.message);
     }
+  }, "image/png", 1);
+}
 
-    // Upload image with cropping
-    uploadBtn.addEventListener("click", () => {
-      const file = fileInput.files[0];
-      if (!file) { showToast("Please select an image first"); return; }
-      if (!cropper) { showToast("Cropper not initialized"); return; }
-
-      const canvas = cropper.getCroppedCanvas({ width: 512, height: 512, imageSmoothingQuality: "high" });
-      if (!canvas) { showToast("Failed to crop image"); return; }
-
-      canvas.toBlob(async blob => {
-        if (!blob) { showToast("Failed to create image blob"); return; }
-
-        try {
-          const storageRef = ref(storage, `customer_images/${uid}_${Date.now()}.png`);
-          await uploadBytes(storageRef, blob);
-          const downloadURL = await getDownloadURL(storageRef);
-
-          const userRef = dbRef(database, "Customer_Details/" + uid);
-          await update(userRef, { image: downloadURL });
-
-          showToast("Image cropped & uploaded successfully!");
-        } catch (err) {
-          showToast("Upload failed: " + err.message);
-        }
-      }, "image/png", 1);
-    });
-
-    // Fetch media
-    fetchBtn.addEventListener("click", async () => {
-      try {
-        const snapshot = await get(child(dbRef(database), "Customer_Details/" + uid + "/media"));
-        if (snapshot.exists()) {
-          displayMedia(snapshot.val());
-        } else {
-          showToast("No media found for this user");
-        }
-      } catch (err) {
-        showToast("Error fetching media: " + err.message);
-      }
-    });
-
-    function displayMedia(url) {
-      mediaContainer.innerHTML = "";
-      const cleanUrl = url.split("?")[0].toLowerCase();
-
-      if (cleanUrl.match(/\.(jpeg|jpg|png|gif)$/)) {
-        const img = document.createElement("img");
-        img.src = url;
-        img.className = "mx-auto rounded-xl shadow-md mb-2";
-        img.style.width = "300px";
-        mediaContainer.appendChild(img);
-      } else if (cleanUrl.match(/\.(mp4|webm|ogg)$/)) {
-        const video = document.createElement("video");
-        video.src = url;
-        video.controls = true;
-        video.className = "mx-auto rounded-xl shadow-md mb-2";
-        video.style.width = "300px";
-        mediaContainer.appendChild(video);
-      } else {
-        const p = document.createElement("p");
-        p.textContent = "Unknown file type: " + url;
-        mediaContainer.appendChild(p);
-      }
-
-      const downloadBtn = document.createElement("a");
-      downloadBtn.href = url;
-      downloadBtn.target = "_blank";
-      downloadBtn.textContent = "Download to Gallery";
-      downloadBtn.className = "bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md inline-block mt-2";
-      mediaContainer.appendChild(downloadBtn);
+// Fetch & display media
+async function fetchMedia() {
+  try {
+    const snapshot = await get(child(dbRef(database), "Customer_Details/" + uid + "/media"));
+    if(snapshot.exists()) {
+      const url = snapshot.val();
+      displayMedia(url);
+    } else {
+      showToast("No media found for this user");
     }
-  </script>
+  } catch(err) {
+    showToast("Error fetching media: " + err.message);
+  }
+}
+
+function displayMedia(url) {
+  mediaContainer.innerHTML = "";
+  const cleanUrl = url.split("?")[0].toLowerCase();
+
+  if(cleanUrl.match(/\.(jpeg|jpg|png|gif)$/)) {
+    const img = document.createElement("img");
+    img.src = url;
+    img.className = "mx-auto rounded-xl shadow-md mb-2";
+    img.style.width = "300px";
+    mediaContainer.appendChild(img);
+  } else if(cleanUrl.match(/\.(mp4|webm|ogg)$/)) {
+    const video = document.createElement("video");
+    video.src = url;
+    video.controls = true;
+    video.className = "mx-auto rounded-xl shadow-md mb-2";
+    video.style.width = "300px";
+    mediaContainer.appendChild(video);
+  } else {
+    const p = document.createElement("p");
+    p.textContent = "Unknown file type: " + url;
+    mediaContainer.appendChild(p);
+  }
+
+  const downloadBtn = document.createElement("a");
+  downloadBtn.href = url;
+  downloadBtn.target = "_blank";
+  downloadBtn.textContent = "Download Media";
+  downloadBtn.className = "bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md inline-block mt-2";
+  mediaContainer.appendChild(downloadBtn);
+}
+
+// Toast function
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3000);
+}
+</script>
+
 </body>
 </html>
