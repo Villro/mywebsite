@@ -349,7 +349,7 @@ header {
 
 
   <div class="restaurant-img" onclick="openCard()">
-    <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fapply_c.png?alt=media&token=a76a4a1e-43ea-495c-9c02-4e7642d9bdf6" alt="HTML5 Icon" width="320px" gravity height="128px" padding="4px"/></p>
+    <p style="text-align:center;"> <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2FBlack%20Modern%20Food%20Menu%20Presentation.png?alt=media&token=c4e5c1b5-b9f2-474e-8adc-6327214c8587" alt="HTML5 Icon" width="320px" gravity height="128px" padding="4px"/></p>
   </div>
   <div class="grid-container">
     <!-- Item 1 -->
@@ -392,7 +392,10 @@ header {
   </div> 
 <div class="grid-container">
     <!-- Item 1 -->
-  
+   <div class="grid-item" onclick="openMenu('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_menu(A-M)%2Fmapango7.jpeg?alt=media&token=6e17ead9-f857-4ad3-86f6-0551bff0d689')">
+  <img src="https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/img%2Fimages%20(11).jfif?alt=media&token=80216aa6-f972-4e8e-a2c7-0400911940ca" alt="Side Dishes">
+  <div class="food-name">Chaap Menu</div>
+</div>
     <!-- Item 2 -->
 
     <!-- Add more items below as needed -->
@@ -406,7 +409,9 @@ header {
     window.location.href = "../menu/mapango-menu.html?done=" + cat;
   }
   function openCard() {
-   window.location.href = "../card.html"; // FIXED (was missing quotes)
+  // window.location.href = "../card.html"; // FIXED (was missing quotes)
+          window.location.href = `../showmenu.html?img=${encodeURIComponent('https://firebasestorage.googleapis.com/v0/b/villroconnection.appspot.com/o/rs_menu(A-M)%2Fmapango7.jpeg?alt=media&token=6e17ead9-f857-4ad3-86f6-0551bff0d689')}`;
+
   }
 
   const params = new URLSearchParams(window.location.search);
