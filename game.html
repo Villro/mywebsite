@@ -2,446 +2,216 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>Tambola Ticket — Mobile Friendly</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tambola Ticket 🎟️</title>
 <style>
-  :root{
-    --bg:#101820;
-    --card:#1a2533;
-    --accent:#ffcc00;
-    --cell:#f5f5f5;
-    --marked:#d62828;
-    --muted:#cfcfcf;
-    --gap:8px;
-    --radius:12px;
-  }
-
-  html,body{height:100%;margin:0;}
-  body{
-    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
-    background:var(--bg);
+  body {
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#101820;
     color:#fff;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:flex-start;
-    gap:12px;
-    padding:16px;
-    box-sizing:border-box;
-  }
-
-  header{
-    width:100%;
-    max-width:760px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-  }
-  h1{
-    font-size:1.05rem;
+    justify-content:center;
+    height:100vh;
     margin:0;
-    color:var(--accent);
-    font-weight:800;
   }
-
-  .wrapper{
-    width:100%;
-    max-width:760px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    align-items:center;
+  h2 {
+    color:#ffcc00;
+    margin:12px 0;
   }
-
-  /* ticket card */
-  .ticket{
-    width:100%;
-    background:var(--card);
-    padding:12px;
-    border-radius:var(--radius);
-    box-shadow:0 8px 30px rgba(0,0,0,0.45);
-    box-sizing:border-box;
+  .ticket {
+    display:grid;
+    grid-template-rows:repeat(3,1fr);
+    gap:8px;
+    background:#1a2533;
+    padding:14px;
+    border-radius:12px;
+    box-shadow:0 6px 28px rgba(0,0,0,.5);
+    width:520px;
+    max-width:96vw;
   }
-
-  /* rows & cells */
-  .row{
+  .row {
     display:grid;
     grid-template-columns:repeat(9,1fr);
-    gap:8px;
-    margin-bottom:6px;
+    gap:6px;
   }
-
-  .cell{
-    background:var(--cell);
-    color:#222;
-    min-height:54px;
+  .cell {
+    aspect-ratio:1/1; /* ✅ perfect square everywhere */
     display:flex;
     align-items:center;
     justify-content:center;
-    border-radius:8px;
+    background:#f5f5f5;
+    color:#222;
     font-weight:700;
-    font-size:1rem;
+    border-radius:8px;
+    cursor:pointer;
     user-select:none;
-    -webkit-user-select:none;
-    touch-action:manipulation;
-    transition:transform .08s ease, box-shadow .12s ease;
+    font-size:18px;
+    transition:all .14s ease;
   }
-  .cell:active{ transform:scale(.98); }
-  .cell.empty{
+  .cell.empty {
     background:transparent;
-    border:1px dashed rgba(255,255,255,0.06);
-    color:rgba(255,255,255,0.6);
+    border:1px dashed rgba(255,255,255,.08);
+    cursor:default;
+    color:#bbb;
     font-weight:600;
   }
-  .cell.marked{
-    background:var(--marked);
+  .cell.marked {
+    background:#d62828;
     color:#fff;
-    text-decoration:line-through;
   }
-
-  /* controls sticky for mobile */
-  .controls{
-    width:100%;
-    max-width:760px;
+  .controls {
     display:flex;
-    gap:8px;
-    align-items:center;
-    justify-content:space-between;
-  }
-
-  .btn{
-    background:var(--accent);
-    color:#111;
-    border:none;
-    padding:12px 14px;
-    border-radius:10px;
-    font-weight:800;
-    font-size:1rem;
-    flex:0 0 auto;
-    box-shadow:0 6px 18px rgba(0,0,0,0.35);
-    cursor:pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .btn.secondary{
-    background:transparent;
-    color:var(--accent);
-    border:1px solid rgba(255,204,0,0.15);
-    font-weight:700;
-  }
-
-  .timestamp{
-    color:var(--muted);
-    font-size:.9rem;
-    text-align:center;
-    margin-top:4px;
-  }
-
-  /* bottom bar for small screens */
-  .mobile-bar{
-    display:none;
-    position:fixed;
-    left:0;right:0;
-    bottom:0;
-    padding:10px;
-    background:linear-gradient(180deg, rgba(16,24,32,0.95), rgba(16,24,32,0.98));
-    border-top:1px solid rgba(255,255,255,0.02);
-    box-shadow:0 -6px 22px rgba(0,0,0,0.45);
-    justify-content:center;
+    flex-wrap:wrap;
     gap:10px;
-    z-index:40;
+    margin-top:12px;
+    align-items:center;
+    justify-content:center;
   }
-
-  /* responsive tweaks */
-  @media (max-width:600px){
-    body{padding:12px;}
-    .cell{min-height:62px;font-size:1.05rem;border-radius:10px}
-    .ticket{padding:10px}
-    .mobile-bar{display:flex}
-    .controls{display:none}
+  .btn {
+    background:#ffcc00;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    color:#000;
+    font-weight:700;
+    cursor:pointer;
   }
-
-  @media (orientation:landscape) and (max-height:500px){
-    .cell{min-height:44px}
+  .timestamp {
+    color:#cfcfcf;
+    margin-top:8px;
+    font-size:13px;
+    text-align:center;
+  }
+  @media (max-width:560px) {
+    .cell { font-size:15px; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Tambola Ticket 🎟️</h1>
-  <div style="font-size:.92rem;color:var(--muted)" id="topTime"></div>
-</header>
+<h2>Your Tambola Ticket 🎟️</h2>
+<div class="ticket" id="ticket"></div>
 
-<div class="wrapper" role="main">
-  <div class="ticket" id="ticket" aria-label="Tambola ticket"></div>
-
-  <div class="controls" id="desktopControls">
-    <div style="display:flex;gap:8px">
-      <button class="btn" id="newBtn">🎲 New Ticket</button>
-      <button class="btn secondary" id="clearMarksBtn">↺ Clear Marks</button>
-    </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="btn secondary" id="saveBtn">💾 Save</button>
-      <div class="timestamp" id="timestamp"></div>
-    </div>
-  </div>
+<div class="controls">
+  <button class="btn" id="newBtn">🎲 New Ticket</button>
+  <button class="btn" id="saveBtn">💾 Save</button>
+  <button class="btn" id="clearBtn">🧹 Clear Marks</button>
 </div>
 
-<!-- Mobile bottom bar -->
-<div class="mobile-bar" id="mobileBar">
-  <button class="btn" id="mNew">🎲 New</button>
-  <button class="btn secondary" id="mClear">↺ Clear</button>
-  <button class="btn secondary" id="mSave">💾 Save</button>
-</div>
+<div class="timestamp" id="timestamp"></div>
 
 <script>
-/* same robust ticket generation + persistence as previous version, with mobile UI hookups */
-const ROWS = 3, COLS = 9;
-const STORAGE_KEY = 'tambola_ticket_v2_mobile';
+const ROWS=3,COLS=9,STORAGE_KEY='tambola_ticket_v2';
+const randInt=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const shuffle=arr=>arr.slice().sort(()=>Math.random()-0.5);
 
-/* helper: shuffle */
-const shuffle = arr => arr.slice().sort(()=>Math.random()-0.5);
-
-/* column counts logic (sums to 15, each column 1..3) */
 function makeColumnCounts(){
-  const counts = Array(COLS).fill(1);
-  let remaining = 15 - COLS; // 6
-  while (remaining > 0){
-    const idx = Math.floor(Math.random()*COLS);
-    if (counts[idx] < 3){ counts[idx]++; remaining--; }
-  }
+  const counts=Array(COLS).fill(1); let remaining=15-COLS;
+  while(remaining>0){const i=Math.floor(Math.random()*COLS);if(counts[i]<3){counts[i]++;remaining--;}}
   return counts;
 }
-
-/* assign rows for each column (greedy) */
-function assignRowsToColumns(columnCounts){
-  const assignment = Array.from({length:COLS}, ()=>[]);
-  const rowSlots = [5,5,5];
-  const colsOrder = [...Array(COLS).keys()].sort((a,b)=>columnCounts[b]-columnCounts[a] || Math.random()-0.5);
-  for (const col of colsOrder){
-    const k = columnCounts[col];
-    const pickable = [0,1,2].slice().sort((a,b)=> (rowSlots[b]-rowSlots[a]) || Math.random()-0.5 );
-    const chosen = pickable.slice(0,k);
-    chosen.forEach(r=>{ assignment[col].push(r); rowSlots[r]--; });
-  }
-  for (let r=0;r<ROWS;r++){
-    while (rowSlots[r] > 0){
-      const candidateCols = [...Array(COLS).keys()].filter(c=>assignment[c].length<3 && !assignment[c].includes(r));
-      if (!candidateCols.length) break;
-      const c = candidateCols[Math.floor(Math.random()*candidateCols.length)];
-      assignment[c].push(r);
-      rowSlots[r]--;
-    }
-  }
-  return assignment;
+function assignRowsToColumns(colCounts){
+  const assign=Array.from({length:COLS},()=>[]); const rowSlots=[5,5,5];
+  const order=[...Array(COLS).keys()].sort((a,b)=>colCounts[b]-colCounts[a]||Math.random()-0.5);
+  for(const c of order){const k=colCounts[c];const pickable=[0,1,2].sort((a,b)=>rowSlots[b]-rowSlots[a]||Math.random()-0.5);const chosen=pickable.slice(0,k);chosen.forEach(r=>{assign[c].push(r);rowSlots[r]--;});}
+  return assign;
 }
 
-/* build grid numbers respecting constraints */
 function buildGrid(){
-  const colCounts = makeColumnCounts();
-  const rowsByCol = assignRowsToColumns(colCounts);
-  const columnsNumbers = [];
-
-  for (let c=0;c<COLS;c++){
-    const start = c*10+1;
-    const end = (c===8)?90:(c+1)*10;
-    const all = Array.from({length:end-start+1}, (_,i)=>start+i);
-    const pickCount = rowsByCol[c].length;
-    const chosen = shuffle(all).slice(0,pickCount).sort((a,b)=>a-b);
+  const colCounts=makeColumnCounts();
+  const rowsByCol=assignRowsToColumns(colCounts);
+  const columnsNumbers=[];
+  for(let c=0;c<COLS;c++){
+    const start=c*10+1,end=(c===8)?90:(c+1)*10;
+    const all=Array.from({length:end-start+1},(_,i)=>start+i);
+    const pickCount=rowsByCol[c].length;
+    const chosen=shuffle(all).slice(0,pickCount).sort((a,b)=>a-b);
     columnsNumbers.push(chosen);
   }
-
-  const grid = Array.from({length:ROWS}, ()=>Array(COLS).fill(null));
-  for (let c=0;c<COLS;c++){
-    const assignedRows = rowsByCol[c].slice().sort((a,b)=>a-b);
-    const numbers = columnsNumbers[c].slice().sort((a,b)=>a-b);
-    for (let i=0;i<Math.min(assignedRows.length, numbers.length); i++){
-      grid[assignedRows[i]][c] = numbers[i];
-    }
+  const grid=Array.from({length:ROWS},()=>Array(COLS).fill(null));
+  for(let c=0;c<COLS;c++){
+    const rows=rowsByCol[c].slice().sort((a,b)=>a-b);
+    const nums=columnsNumbers[c].slice().sort((a,b)=>a-b);
+    for(let i=0;i<Math.min(rows.length,nums.length);i++) grid[rows[i]][c]=nums[i];
   }
-
-  // balance rows to exactly 5
-  for (let r=0;r<ROWS;r++){
-    let cnt = grid[r].filter(x=>x!==null).length;
-    if (cnt > 5) {
-      const filledCols = grid[r].map((v,i)=>v!==null?i:null).filter(v=>v!==null);
-      while (cnt>5){
-        const col = filledCols[Math.floor(Math.random()*filledCols.length)];
-        const columnTotal = [0,1,2].reduce((a,rr)=> a + (grid[rr][col]!==null?1:0), 0);
-        if (columnTotal>1){
-          grid[r][col] = null;
-          cnt--;
-          const idx = filledCols.indexOf(col);
-          if (idx>=0) filledCols.splice(idx,1);
-        } else {
-          const idx2 = filledCols.indexOf(col);
-          if (idx2>=0) filledCols.splice(idx2,1);
-          if (!filledCols.length) break;
-        }
-      }
-    } else if (cnt < 5) {
-      const emptyCols = grid[r].map((v,i)=>v===null?i:null).filter(v=>v!==null);
-      const availableCols = emptyCols.filter(col=>{
-        const used = new Set(grid.flat().filter(x=>x!==null));
-        const start = col*10+1, end = (col===8?90:(col+1)*10);
-        return ([0,1,2].reduce((a,rr)=> a + (grid[rr][col]!==null?1:0), 0) < 3)
-               && Array.from({length:end-start+1},(_,i)=>start+i).some(n=>!used.has(n));
-      });
-      while (cnt<5 && availableCols.length){
-        const col = availableCols.splice(Math.floor(Math.random()*availableCols.length),1)[0];
-        const used = new Set(grid.flat().filter(x=>x!==null));
-        const start = col*10+1, end = (col===8?90:(col+1)*10);
-        const choices = Array.from({length:end-start+1},(_,i)=>start+i).filter(n=>!used.has(n));
-        if (!choices.length) continue;
-        const pick = choices.sort((a,b)=>a-b)[0];
-        grid[r][col] = pick;
-        cnt++;
-      }
-    }
-  }
-
-  // ensure column sorting top->bottom
-  for (let c=0;c<COLS;c++){
-    const colNums = [];
-    for (let r=0;r<ROWS;r++) if (grid[r][c] !== null) colNums.push(grid[r][c]);
-    colNums.sort((a,b)=>a-b);
-    const filledRows = [];
-    for (let r=0;r<ROWS;r++) if (grid[r][c] !== null) filledRows.push(r);
-    for (let i=0;i<filledRows.length;i++) grid[filledRows[i]][c] = colNums[i];
-  }
-
-  // final verify
-  const totals = grid.flat().filter(x=>x!==null).length;
-  const perRow = grid.map(r=>r.filter(x=>x!==null).length);
-  if (totals !== 15 || perRow.some(n=>n!==5)) return buildGrid();
+  const totals=grid.flat().filter(x=>x!==null).length;
+  if(totals!==15) return buildGrid();
   return grid;
 }
 
-/* render and persist */
-function renderTicket(grid, marked=[]) {
-  const ticketEl = document.getElementById('ticket');
-  ticketEl.innerHTML = '';
-  for (let r=0;r<ROWS;r++){
-    const rowEl = document.createElement('div');
-    rowEl.className = 'row';
-    for (let c=0;c<COLS;c++){
-      const cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.dataset.row = r; cell.dataset.col = c;
-      const val = grid[r][c];
-      if (val == null) {
-        cell.classList.add('empty');
-        cell.textContent = '';
-      } else {
-        cell.textContent = val;
-        const key = `${r}-${c}`;
-        if (marked && marked.includes(key)) cell.classList.add('marked');
-        cell.addEventListener('click', () => {
-          cell.classList.toggle('marked');
-          persistState(grid);
-        });
+function renderTicket(grid,marked=[]){
+  const container=document.getElementById('ticket');
+  container.innerHTML='';
+  for(let r=0;r<ROWS;r++){
+    const row=document.createElement('div');row.className='row';
+    for(let c=0;c<COLS;c++){
+      const cell=document.createElement('div');cell.className='cell';
+      cell.dataset.row=r;cell.dataset.col=c;
+      const val=grid[r][c];
+      if(val===null){cell.classList.add('empty');}
+      else{
+        cell.textContent=val;
+        const key=`${r}-${c}`;
+        if(marked.includes(key))cell.classList.add('marked');
+        cell.onclick=()=>{cell.classList.toggle('marked');persistState(grid);};
       }
-      rowEl.appendChild(cell);
+      row.appendChild(cell);
     }
-    ticketEl.appendChild(rowEl);
+    container.appendChild(row);
   }
 }
-
-/* persist current grid + marks */
-function persistState(grid) {
-  const markedNodes = Array.from(document.querySelectorAll('.cell.marked'));
-  const marked = markedNodes.map(n=>`${n.dataset.row}-${n.dataset.col}`);
-  const time = localStorage.getItem('ticket_created_time') || new Date().toLocaleString();
-  const data = { grid, marked, time };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  localStorage.setItem('ticket_created_time', time);
-  document.getElementById('timestamp').textContent = `Created: ${time}`;
-  document.getElementById('topTime').textContent = time;
+function persistState(grid){
+  const marked=Array.from(document.querySelectorAll('.cell.marked')).map(n=>`${n.dataset.row}-${n.dataset.col}`);
+  const time=localStorage.getItem('ticket_created_time')||new Date().toLocaleString();
+  const data={grid,marked,time};
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  localStorage.setItem('ticket_created_time',time);
+  document.getElementById('timestamp').textContent=`Created: ${time}`;
 }
-
-/* create and save */
 function createAndSaveTicket(){
-  const grid = buildGrid();
-  const time = new Date().toLocaleString();
-  const data = { grid, marked: [], time };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  localStorage.setItem('ticket_created_time', time);
-  renderTicket(grid, []);
-  document.getElementById('timestamp').textContent = `Created: ${time}`;
-  document.getElementById('topTime').textContent = time;
+  const grid=buildGrid(),time=new Date().toLocaleString();
+  const data={grid,marked:[],time};
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  localStorage.setItem('ticket_created_time',time);
+  renderTicket(grid,[]);
+  document.getElementById('timestamp').textContent=`Created: ${time}`;
 }
-
-/* load */
 function loadTicket(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return false;
-  try {
-    const data = JSON.parse(raw);
-    if (!data || !Array.isArray(data.grid)) return false;
-    renderTicket(data.grid, data.marked||[]);
-    document.getElementById('timestamp').textContent = `Created: ${data.time || ''}`;
-    document.getElementById('topTime').textContent = data.time || '';
+  const raw=localStorage.getItem(STORAGE_KEY);
+  if(!raw)return false;
+  try{
+    const data=JSON.parse(raw);
+    if(!data||!Array.isArray(data.grid))return false;
+    renderTicket(data.grid,data.marked||[]);
+    document.getElementById('timestamp').textContent=`Created: ${data.time||''}`;
     return true;
-  } catch(e){
-    console.error(e);
-    return false;
-  }
+  }catch(e){console.error(e);return false;}
 }
 
-/* UI wiring */
-document.getElementById('newBtn').addEventListener('click', ()=> {
-  if (confirm('Generate a NEW ticket? This will replace saved ticket and marks.')) createAndSaveTicket();
-});
-document.getElementById('mNew').addEventListener('click', ()=> {
-  if (confirm('Generate a NEW ticket? This will replace saved ticket and marks.')) createAndSaveTicket();
-});
-document.getElementById('clearMarksBtn').addEventListener('click', ()=> {
-  document.querySelectorAll('.cell.marked').forEach(n=>n.classList.remove('marked'));
-  // Save only the marks removed (persist state grid unchanged)
-  const grid = collectGridFromDOM();
+document.getElementById('newBtn').onclick=()=>{if(confirm('Generate a NEW ticket? This will replace saved ticket and marks.'))createAndSaveTicket();};
+document.getElementById('saveBtn').onclick=()=>{
+  const grid=[...Array(ROWS)].map(()=>Array(COLS).fill(null));
+  document.querySelectorAll('.cell').forEach(el=>{
+    const r=+el.dataset.row,c=+el.dataset.col;
+    grid[r][c]=el.classList.contains('empty')?null:(el.textContent?+el.textContent:null);
+  });
   persistState(grid);
-});
-document.getElementById('mClear').addEventListener('click', ()=> {
-  document.querySelectorAll('.cell.marked').forEach(n=>n.classList.remove('marked'));
-  const grid = collectGridFromDOM();
-  persistState(grid);
-});
-document.getElementById('saveBtn').addEventListener('click', ()=> {
-  const grid = collectGridFromDOM();
-  persistState(grid);
-  alert('Saved');
-});
-document.getElementById('mSave').addEventListener('click', ()=> {
-  const grid = collectGridFromDOM();
-  persistState(grid);
-  alert('Saved');
-});
-
-/* collect grid from DOM (useful before saving) */
-function collectGridFromDOM(){
-  const grid = Array.from({length:ROWS}, ()=>Array(COLS).fill(null));
-  for (let r=0;r<ROWS;r++){
-    for (let c=0;c<COLS;c++){
-      const el = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
-      if (!el || el.classList.contains('empty')) grid[r][c] = null;
-      else grid[r][c] = el.textContent ? Number(el.textContent) : null;
-    }
+  alert('Saved!');
+};
+document.getElementById('clearBtn').onclick=()=>{
+  document.querySelectorAll('.cell.marked').forEach(el=>el.classList.remove('marked'));
+  const raw=localStorage.getItem(STORAGE_KEY);
+  if(raw){
+    const data=JSON.parse(raw);
+    data.marked=[];
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
   }
-  return grid;
-}
+  alert('All marks cleared!');
+};
 
-/* on page load: restore or create */
-if (!loadTicket()) createAndSaveTicket();
-
-/* beforeunload: persist latest toggles */
-window.addEventListener('beforeunload', (e)=>{
-  const grid = collectGridFromDOM();
-  persistState(grid);
-  e.preventDefault();
-  e.returnValue = '';
-});
+if(!loadTicket())createAndSaveTicket();
 </script>
 </body>
 </html>
