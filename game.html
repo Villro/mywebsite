@@ -97,14 +97,12 @@
 <div class="controls">
   <button class="btn" id="newBtn">🎲 New Ticket</button>
   <button class="btn" id="saveBtn">💾 Save</button>
-  <button class="btn" id="clearBtn">🧹 Clear Marks</button>
 </div>
 
 <div class="timestamp" id="timestamp"></div>
 
 <script>
 const ROWS=3,COLS=9,STORAGE_KEY='tambola_ticket_v2';
-const randInt=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const shuffle=arr=>arr.slice().sort(()=>Math.random()-0.5);
 
 function makeColumnCounts(){
@@ -191,24 +189,13 @@ function loadTicket(){
 }
 
 document.getElementById('newBtn').onclick=()=>{if(confirm('Generate a NEW ticket? This will replace saved ticket and marks.'))createAndSaveTicket();};
-document.getElementById('saveBtn').onclick=()=>{
-  const grid=[...Array(ROWS)].map(()=>Array(COLS).fill(null));
+document.getElementById('saveBtn').onclick=()=>{const grid=[...Array(ROWS)].map(()=>Array(COLS).fill(null));
   document.querySelectorAll('.cell').forEach(el=>{
     const r=+el.dataset.row,c=+el.dataset.col;
     grid[r][c]=el.classList.contains('empty')?null:(el.textContent?+el.textContent:null);
   });
   persistState(grid);
   alert('Saved!');
-};
-document.getElementById('clearBtn').onclick=()=>{
-  document.querySelectorAll('.cell.marked').forEach(el=>el.classList.remove('marked'));
-  const raw=localStorage.getItem(STORAGE_KEY);
-  if(raw){
-    const data=JSON.parse(raw);
-    data.marked=[];
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
-  }
-  alert('All marks cleared!');
 };
 
 if(!loadTicket())createAndSaveTicket();
