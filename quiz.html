@@ -39,8 +39,6 @@
   button:hover {
     background: #0056b3;
   }
-  .correct { background: #28a745 !important; }
-  .wrong { background: #dc3545 !important; }
   input {
     width: 90%;
     padding: 12px;
@@ -58,17 +56,17 @@
 </head>
 <body>
 <div class="card">
-  <h2 id="question">Waiting for next question...</h2>
-  <div id="options"></div>
-  <input type="text" id="playerName" placeholder="Enter your name and press Enter" autocomplete="off" />
+  <h2 id="question">Enter your name to join</h2>
+  <input type="text" id="playerName" placeholder="Enter your name" autocomplete="off" />
+  <button id="joinBtn">Join Game</button>
   <p id="status"></p>
+  <div id="options"></div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-  // ✅ Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
     authDomain: "villroconnection.firebaseapp.com",
@@ -84,61 +82,86 @@
 
   const qRef = ref(db, "quiz_game/current_question");
   const ansRef = ref(db, "quiz_game/answers");
+  const playersRef = ref(db, "quiz_game/players");
 
   let playerName = localStorage.getItem("quiz_name") || null;
   const nameInput = document.getElementById("playerName");
   const statusElem = document.getElementById("status");
+  const joinBtn = document.getElementById("joinBtn");
+  const qElem = document.getElementById("question");
+  const optElem = document.getElementById("options");
 
-  // ✅ When player already registered
+  function generateUniqueName(base) {
+    const id = Math.floor(1000 + Math.random() * 9000);
+    return base + "_" + id;
+  }
+
+  function joinGame(name) {
+    playerName = generateUniqueName(name);
+    localStorage.setItem("quiz_name", playerName);
+    set(ref(db, "quiz_game/players/" + playerName), {
+      joined: true,
+      points: 0,
+      timestamp: Date.now()
+    });
+    nameInput.style.display = "none";
+    joinBtn.style.display = "none";
+    qElem.innerText = "Waiting for next question...";
+    statusElem.innerText = "Welcome, " + playerName + " 👋";
+    startListening();
+  }
+
+  joinBtn.addEventListener("click", () => {
+    const name = nameInput.value.trim();
+    if (!name) return alert("Please enter your name!");
+    joinGame(name);
+  });
+
+  nameInput.addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+      const name = nameInput.value.trim();
+      if (!name) return;
+      joinGame(name);
+    }
+  });
+
   if (playerName) {
     nameInput.style.display = "none";
-    statusElem.innerText = "Welcome, " + playerName + " 👋";
-  } else {
-    // ✅ Press Enter to register name
-    nameInput.addEventListener("keypress", e => {
-      if (e.key === "Enter") {
-        playerName = nameInput.value.trim();
-        if (playerName) {
-          localStorage.setItem("quiz_name", playerName);
-          nameInput.style.display = "none";
-          statusElem.innerText = "Welcome, " + playerName + " 👋";
-        }
+    joinBtn.style.display = "none";
+    statusElem.innerText = "Welcome back, " + playerName + " 👋";
+    startListening();
+  }
+
+  function startListening() {
+    onValue(qRef, snapshot => {
+      const data = snapshot.val();
+      if (!data) {
+        qElem.innerText = "Waiting for next question...";
+        optElem.innerHTML = "";
+        return;
+      }
+
+      qElem.innerText = data.question;
+      optElem.innerHTML = "";
+
+      if (data.showOptions) {
+        const letters = ["A", "B", "C", "D"];
+        data.options.forEach((opt, i) => {
+          const btn = document.createElement("button");
+          btn.innerText = letters[i] + ") " + opt;
+          btn.onclick = async () => {
+            if (!playerName) return alert("Please enter your name first!");
+            const obj = { answer: i, time: Date.now() };
+            await update(ansRef, { [playerName]: obj });
+            optElem.innerHTML = `<p><b>Answer submitted!</b> Waiting for next question...</p>`;
+          };
+          optElem.appendChild(btn);
+        });
+      } else {
+        optElem.innerHTML = "<p>Waiting for next question...</p>";
       }
     });
   }
-
-  // ✅ Listen for question updates
-  onValue(qRef, snapshot => {
-    const data = snapshot.val();
-    const qElem = document.getElementById("question");
-    const optElem = document.getElementById("options");
-
-    if (!data) {
-      qElem.innerText = "Waiting for next question...";
-      optElem.innerHTML = "";
-      return;
-    }
-
-    qElem.innerText = data.question;
-    optElem.innerHTML = "";
-
-    if (data.showOptions) {
-      const letters = ["A", "B", "C", "D"];
-      data.options.forEach((opt, i) => {
-        const btn = document.createElement("button");
-        btn.innerText = letters[i] + ") " + opt;
-        btn.onclick = async () => {
-          if (!playerName) return alert("Please enter your name first!");
-          const obj = { answer: i, time: Date.now() };
-          await update(ansRef, { [playerName]: obj });
-          optElem.innerHTML = `<p><b>Answer submitted!</b> Waiting for next question...</p>`;
-        };
-        optElem.appendChild(btn);
-      });
-    } else {
-      optElem.innerHTML = "<p>Waiting for next question...</p>";
-    }
-  });
 </script>
 </body>
 </html>
