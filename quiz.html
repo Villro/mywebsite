@@ -5,53 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Villro Quiz Game</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #f0f4ff, #dfe9f3);
-    text-align: center;
-    margin: 0;
-    padding: 0;
-  }
-  .card {
-    background: #fff;
-    max-width: 400px;
-    margin: 60px auto;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  }
-  h2 {
-    color: #333;
-  }
-  button {
-    display: block;
-    width: 90%;
-    padding: 12px;
-    margin: 10px auto;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #007bff;
-    color: white;
-    transition: background 0.3s;
-  }
-  button:hover {
-    background: #0056b3;
-  }
-  input {
-    width: 90%;
-    padding: 12px;
-    margin: 10px auto;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    display: block;
-  }
-  #status {
-    color: #555;
-    font-weight: bold;
-  }
+  body { font-family: Arial, sans-serif; background: linear-gradient(135deg,#f0f4ff,#dfe9f3); text-align:center; }
+  .card { background:#fff; max-width:400px; margin:60px auto; padding:20px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+  button,input { width:90%; padding:12px; margin:10px auto; font-size:16px; border:none; border-radius:8px; display:block; }
+  button { background:#007bff; color:white; cursor:pointer; transition:background 0.3s; }
+  button:hover { background:#0056b3; }
+  input { border:1px solid #ccc; }
+  #status { font-weight:bold; color:#444; margin-top:10px; }
 </style>
 </head>
 <body>
@@ -59,13 +19,14 @@
   <h2 id="question">Enter your name to join</h2>
   <input type="text" id="playerName" placeholder="Enter your name" autocomplete="off" />
   <button id="joinBtn">Join Game</button>
+  <button id="changeBtn" style="display:none;">Change Name</button>
   <p id="status"></p>
   <div id="options"></div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  import { getDatabase, ref, onValue, update, set, remove } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
@@ -79,86 +40,96 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-
   const qRef = ref(db, "quiz_game/current_question");
   const ansRef = ref(db, "quiz_game/answers");
   const playersRef = ref(db, "quiz_game/players");
 
-  let playerName = localStorage.getItem("quiz_name") || null;
   const nameInput = document.getElementById("playerName");
-  const statusElem = document.getElementById("status");
   const joinBtn = document.getElementById("joinBtn");
+  const changeBtn = document.getElementById("changeBtn");
+  const statusElem = document.getElementById("status");
   const qElem = document.getElementById("question");
   const optElem = document.getElementById("options");
 
-  function generateUniqueName(base) {
+  let playerName = localStorage.getItem("quiz_name") || null;
+  let hasJoined = false;
+
+  // create unique tag for same names
+  function uniqueName(base) {
     const id = Math.floor(1000 + Math.random() * 9000);
     return base + "_" + id;
   }
 
-  function joinGame(name) {
-    playerName = generateUniqueName(name);
+  async function joinGame(name) {
+    playerName = uniqueName(name);
     localStorage.setItem("quiz_name", playerName);
-    set(ref(db, "quiz_game/players/" + playerName), {
-      joined: true,
-      points: 0,
-      timestamp: Date.now()
+    await set(ref(db, "quiz_game/players/" + playerName), {
+      joined: true, points: 0, timestamp: Date.now()
     });
+    hasJoined = true;
     nameInput.style.display = "none";
     joinBtn.style.display = "none";
+    changeBtn.style.display = "block";
     qElem.innerText = "Waiting for next question...";
     statusElem.innerText = "Welcome, " + playerName + " 👋";
-    startListening();
+    listenToQuestions();
   }
 
-  joinBtn.addEventListener("click", () => {
+  joinBtn.onclick = () => {
     const name = nameInput.value.trim();
     if (!name) return alert("Please enter your name!");
     joinGame(name);
-  });
+  };
 
-  nameInput.addEventListener("keypress", e => {
-    if (e.key === "Enter") {
-      const name = nameInput.value.trim();
-      if (!name) return;
-      joinGame(name);
-    }
-  });
+  changeBtn.onclick = () => {
+    localStorage.removeItem("quiz_name");
+    location.reload();
+  };
 
   if (playerName) {
+    hasJoined = true;
     nameInput.style.display = "none";
     joinBtn.style.display = "none";
+    changeBtn.style.display = "block";
     statusElem.innerText = "Welcome back, " + playerName + " 👋";
-    startListening();
+    listenToQuestions();
   }
 
-  function startListening() {
+  function listenToQuestions() {
     onValue(qRef, snapshot => {
-      const data = snapshot.val();
-      if (!data) {
+      const q = snapshot.val();
+      if (!q) {
         qElem.innerText = "Waiting for next question...";
         optElem.innerHTML = "";
         return;
       }
 
-      qElem.innerText = data.question;
+      qElem.innerText = q.question;
       optElem.innerHTML = "";
 
-      if (data.showOptions) {
-        const letters = ["A", "B", "C", "D"];
-        data.options.forEach((opt, i) => {
-          const btn = document.createElement("button");
-          btn.innerText = letters[i] + ") " + opt;
-          btn.onclick = async () => {
-            if (!playerName) return alert("Please enter your name first!");
-            const obj = { answer: i, time: Date.now() };
-            await update(ansRef, { [playerName]: obj });
-            optElem.innerHTML = `<p><b>Answer submitted!</b> Waiting for next question...</p>`;
+      if (q.showOptions) {
+        const letters = ["A","B","C","D"];
+        q.options.forEach((opt,i)=>{
+          const b = document.createElement("button");
+          b.innerText = `${letters[i]}) ${opt}`;
+          b.onclick = async () => {
+            if (!playerName) return;
+            await update(ansRef, { [playerName]: { answer:i, time:Date.now() }});
+            optElem.innerHTML = `<p><b>Answer submitted!</b></p>`;
           };
-          optElem.appendChild(btn);
+          optElem.appendChild(b);
         });
       } else {
         optElem.innerHTML = "<p>Waiting for next question...</p>";
+      }
+    });
+
+    // handle game reset (if db cleared)
+    onValue(ref(db,"quiz_game/players"), snap => {
+      if (!snap.exists()) {
+        localStorage.removeItem("quiz_name");
+        alert("Game reset! Please join again.");
+        location.reload();
       }
     });
   }
