@@ -70,19 +70,20 @@ onValue(qRef, snapshot => {
   optElem.innerHTML = "";
 
   if (data.showOptions) {
-    const letters = ["A", "B", "C", "D"];
-    data.options.forEach((opt, i) => {
+   const letters = ["A", "B", "C", "D"];
+   data.options.forEach((opt, i) => {
       const btn = document.createElement("button");
       btn.innerText = letters[i] + ") " + opt;
       btn.onclick = async () => {
-        if (!playerName) return alert("Enter your name first!");
-        const obj = { answer: i, time: Date.now() };
-        await update(ansRef, { [playerName]: obj });
-        optElem.innerHTML = "<p>Answer submitted!</p>";
+         if (!playerName) return alert("Enter your name first!");
+         const obj = { answer: i, time: Date.now() };
+         await update(ansRef, { [playerName]: obj });
+-        optElem.innerHTML = "<p>Answer submitted!</p>";
++        optElem.innerHTML = `<p><b>Answer submitted!</b> Waiting for next question...</p>`;
       };
       optElem.appendChild(btn);
-    });
-  } else {
+   });
+} else {
     optElem.innerHTML = "<p>Waiting for next question...</p>";
   }
 });
