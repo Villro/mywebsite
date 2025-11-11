@@ -2,91 +2,143 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Villro Quiz Game</title>
 <style>
-body { font-family: Arial; background: #f3f3f3; text-align: center; margin: 0; padding: 40px; }
-.card { background: #fff; max-width: 400px; margin: auto; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
-button { padding: 12px 18px; margin: 10px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; }
-.correct { background: #28a745; color: white; }
-.wrong { background: #dc3545; color: white; }
-input { width: 90%; padding: 10px; margin: 10px; border-radius: 5px; border: 1px solid #ccc; }
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f4ff, #dfe9f3);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  .card {
+    background: #fff;
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  h2 {
+    color: #333;
+  }
+  button {
+    display: block;
+    width: 90%;
+    padding: 12px;
+    margin: 10px auto;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #0056b3;
+  }
+  .correct { background: #28a745 !important; }
+  .wrong { background: #dc3545 !important; }
+  input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px auto;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    display: block;
+  }
+  #status {
+    color: #555;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
 <div class="card">
   <h2 id="question">Waiting for next question...</h2>
   <div id="options"></div>
-  <input type="text" id="playerName" placeholder="Enter your name" />
+  <input type="text" id="playerName" placeholder="Enter your name and press Enter" autocomplete="off" />
   <p id="status"></p>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
-  authDomain: "villroconnection.firebaseapp.com",
-  databaseURL: "https://villroconnection.firebaseio.com",
-  projectId: "villroconnection",
-  storageBucket: "villroconnection.appspot.com",
-  messagingSenderId: "672876428963",
-  appId: "1:672876428963:web:00cd0cc83b1e3a17760916"
-};
+  // ✅ Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
+    authDomain: "villroconnection.firebaseapp.com",
+    databaseURL: "https://villroconnection.firebaseio.com",
+    projectId: "villroconnection",
+    storageBucket: "villroconnection.appspot.com",
+    messagingSenderId: "672876428963",
+    appId: "1:672876428963:web:00cd0cc83b1e3a17760916"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-const qRef = ref(db, "quiz_game/current_question");
-const ansRef = ref(db, "quiz_game/answers");
+  const qRef = ref(db, "quiz_game/current_question");
+  const ansRef = ref(db, "quiz_game/answers");
 
-let playerName = localStorage.getItem("quiz_name") || null;
+  let playerName = localStorage.getItem("quiz_name") || null;
+  const nameInput = document.getElementById("playerName");
+  const statusElem = document.getElementById("status");
 
-if (playerName) {
-  document.getElementById("playerName").style.display = "none";
-  document.getElementById("status").innerText = "Welcome, " + playerName;
-} else {
-  document.getElementById("playerName").addEventListener("change", e => {
-    playerName = e.target.value.trim();
-    if (playerName) {
-      localStorage.setItem("quiz_name", playerName);
-      document.getElementById("status").innerText = "Welcome, " + playerName;
+  // ✅ When player already registered
+  if (playerName) {
+    nameInput.style.display = "none";
+    statusElem.innerText = "Welcome, " + playerName + " 👋";
+  } else {
+    // ✅ Press Enter to register name
+    nameInput.addEventListener("keypress", e => {
+      if (e.key === "Enter") {
+        playerName = nameInput.value.trim();
+        if (playerName) {
+          localStorage.setItem("quiz_name", playerName);
+          nameInput.style.display = "none";
+          statusElem.innerText = "Welcome, " + playerName + " 👋";
+        }
+      }
+    });
+  }
+
+  // ✅ Listen for question updates
+  onValue(qRef, snapshot => {
+    const data = snapshot.val();
+    const qElem = document.getElementById("question");
+    const optElem = document.getElementById("options");
+
+    if (!data) {
+      qElem.innerText = "Waiting for next question...";
+      optElem.innerHTML = "";
+      return;
+    }
+
+    qElem.innerText = data.question;
+    optElem.innerHTML = "";
+
+    if (data.showOptions) {
+      const letters = ["A", "B", "C", "D"];
+      data.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.innerText = letters[i] + ") " + opt;
+        btn.onclick = async () => {
+          if (!playerName) return alert("Please enter your name first!");
+          const obj = { answer: i, time: Date.now() };
+          await update(ansRef, { [playerName]: obj });
+          optElem.innerHTML = `<p><b>Answer submitted!</b> Waiting for next question...</p>`;
+        };
+        optElem.appendChild(btn);
+      });
+    } else {
+      optElem.innerHTML = "<p>Waiting for next question...</p>";
     }
   });
-}
-
-onValue(qRef, snapshot => {
-  const data = snapshot.val();
-  const qElem = document.getElementById("question");
-  const optElem = document.getElementById("options");
-
-  if (!data) {
-    qElem.innerText = "Waiting for next question...";
-    optElem.innerHTML = "";
-    return;
-  }
-
-  qElem.innerText = data.question;
-  optElem.innerHTML = "";
-
-  if (data.showOptions) {
-   const letters = ["A", "B", "C", "D"];
-   data.options.forEach((opt, i) => {
-      const btn = document.createElement("button");
-      btn.innerText = letters[i] + ") " + opt;
-      btn.onclick = async () => {
-         if (!playerName) return alert("Enter your name first!");
-         const obj = { answer: i, time: Date.now() };
-         await update(ansRef, { [playerName]: obj });
--        optElem.innerHTML = "<p>Answer submitted!</p>";
-+        optElem.innerHTML = `<p><b>Answer submitted!</b> Waiting for next question...</p>`;
-      };
-      optElem.appendChild(btn);
-   });
-} else {
-    optElem.innerHTML = "<p>Waiting for next question...</p>";
-  }
-});
 </script>
 </body>
 </html>
