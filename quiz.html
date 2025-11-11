@@ -1,138 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Villro Quiz Game</title>
-<style>
-  body { font-family: Arial, sans-serif; background: linear-gradient(135deg,#f0f4ff,#dfe9f3); text-align:center; }
-  .card { background:#fff; max-width:400px; margin:60px auto; padding:20px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.1);}
-  button,input { width:90%; padding:12px; margin:10px auto; font-size:16px; border:none; border-radius:8px; display:block; }
-  button { background:#007bff; color:white; cursor:pointer; transition:background 0.3s; }
-  button:hover { background:#0056b3; }
-  input { border:1px solid #ccc; }
-  #status { font-weight:bold; color:#444; margin-top:10px; }
-</style>
+  <meta charset="UTF-8" />
+  <title>Quiz Client</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #2b5876, #4e4376);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    #container {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 15px;
+    }
+    button {
+      background: #ff9800;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background: #ffa733; }
+  </style>
 </head>
 <body>
-<div class="card">
-  <h2 id="question">Enter your name to join</h2>
-  <input type="text" id="playerName" placeholder="Enter your name" autocomplete="off" />
-  <button id="joinBtn">Join Game</button>
-  <button id="changeBtn" style="display:none;">Change Name</button>
-  <p id="status"></p>
-  <div id="options"></div>
-</div>
+  <div id="container">
+    <h2>Quiz Game</h2>
+    <div id="login">
+      <p>Enter your name:</p>
+      <input type="text" id="username" placeholder="Your name">
+      <button id="joinBtn">Join</button>
+    </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, onValue, update, set, remove } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+    <div id="quiz" style="display:none;">
+      <h3 id="questionText">Waiting for question...</h3>
+      <div id="options"></div>
+    </div>
+  </div>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
-    authDomain: "villroconnection.firebaseapp.com",
-    databaseURL: "https://villroconnection.firebaseio.com",
-    projectId: "villroconnection",
-    storageBucket: "villroconnection.appspot.com",
-    messagingSenderId: "672876428963",
-    appId: "1:672876428963:web:00cd0cc83b1e3a17760916"
-  };
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getDatabase, ref, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const qRef = ref(db, "quiz_game/current_question");
-  const ansRef = ref(db, "quiz_game/answers");
-  const playersRef = ref(db, "quiz_game/players");
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPGCctXZmnBwp2mTUqyCvluk0vHtwGE58",
+      authDomain: "villroconnection.firebaseapp.com",
+      databaseURL: "https://villroconnection.firebaseio.com",
+      projectId: "villroconnection",
+      storageBucket: "villroconnection.appspot.com",
+      messagingSenderId: "672876428963",
+      appId: "1:672876428963:web:00cd0cc83b1e3a17760916"
+    };
 
-  const nameInput = document.getElementById("playerName");
-  const joinBtn = document.getElementById("joinBtn");
-  const changeBtn = document.getElementById("changeBtn");
-  const statusElem = document.getElementById("status");
-  const qElem = document.getElementById("question");
-  const optElem = document.getElementById("options");
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  let playerName = localStorage.getItem("quiz_name") || null;
-  let hasJoined = false;
+    const params = new URLSearchParams(window.location.search);
+    const uid = params.get('uid') || 'TABLET_001'; // default tablet
+    const basePath = `quiz_game/${uid}`;
 
-  // create unique tag for same names
-  function uniqueName(base) {
-    const id = Math.floor(1000 + Math.random() * 9000);
-    return base + "_" + id;
-  }
+    const loginDiv = document.getElementById('login');
+    const quizDiv = document.getElementById('quiz');
+    const joinBtn = document.getElementById('joinBtn');
+    const usernameInput = document.getElementById('username');
+    const questionText = document.getElementById('questionText');
+    const optionsDiv = document.getElementById('options');
 
-  async function joinGame(name) {
-    playerName = uniqueName(name);
-    localStorage.setItem("quiz_name", playerName);
-    await set(ref(db, "quiz_game/players/" + playerName), {
-      joined: true, points: 0, timestamp: Date.now()
-    });
-    hasJoined = true;
-    nameInput.style.display = "none";
-    joinBtn.style.display = "none";
-    changeBtn.style.display = "block";
-    qElem.innerText = "Waiting for next question...";
-    statusElem.innerText = "Welcome, " + playerName + " 👋";
-    listenToQuestions();
-  }
+    let username = "";
 
-  joinBtn.onclick = () => {
-    const name = nameInput.value.trim();
-    if (!name) return alert("Please enter your name!");
-    joinGame(name);
-  };
+    joinBtn.onclick = () => {
+      username = usernameInput.value.trim();
+      if (!username) return alert("Enter your name first!");
+      loginDiv.style.display = 'none';
+      quizDiv.style.display = 'block';
+    };
 
-  changeBtn.onclick = () => {
-    localStorage.removeItem("quiz_name");
-    location.reload();
-  };
-
-  if (playerName) {
-    hasJoined = true;
-    nameInput.style.display = "none";
-    joinBtn.style.display = "none";
-    changeBtn.style.display = "block";
-    statusElem.innerText = "Welcome back, " + playerName + " 👋";
-    listenToQuestions();
-  }
-
-  function listenToQuestions() {
-    onValue(qRef, snapshot => {
-      const q = snapshot.val();
-      if (!q) {
-        qElem.innerText = "Waiting for next question...";
-        optElem.innerHTML = "";
+    onValue(ref(db, `${basePath}/current_question`), (snap) => {
+      const data = snap.val();
+      if (!data) {
+        questionText.innerText = "Waiting for next question...";
+        optionsDiv.innerHTML = "";
         return;
       }
 
-      qElem.innerText = q.question;
-      optElem.innerHTML = "";
+      questionText.innerText = data.question;
+      optionsDiv.innerHTML = "";
 
-      if (q.showOptions) {
-        const letters = ["A","B","C","D"];
-        q.options.forEach((opt,i)=>{
-          const b = document.createElement("button");
-          b.innerText = `${letters[i]}) ${opt}`;
-          b.onclick = async () => {
-            if (!playerName) return;
-            await update(ansRef, { [playerName]: { answer:i, time:Date.now() }});
-            optElem.innerHTML = `<p><b>Answer submitted!</b></p>`;
-          };
-          optElem.appendChild(b);
+      if (data.showOptions && data.options) {
+        data.options.forEach((opt, i) => {
+          const btn = document.createElement("button");
+          btn.innerText = "ABCD"[i] + ". " + opt;
+          btn.onclick = () => submitAnswer(i);
+          optionsDiv.appendChild(btn);
         });
-      } else {
-        optElem.innerHTML = "<p>Waiting for next question...</p>";
       }
     });
 
-    // handle game reset (if db cleared)
-    onValue(ref(db,"quiz_game/players"), snap => {
-      if (!snap.exists()) {
-        localStorage.removeItem("quiz_name");
-        alert("Game reset! Please join again.");
-        location.reload();
-      }
-    });
-  }
-</script>
+    function submitAnswer(ansIndex) {
+      const ansRef = ref(db, `${basePath}/answers/${username}`);
+      set(ansRef, {
+        answer: ansIndex,
+        time: Date.now()
+      });
+      optionsDiv.innerHTML = "<p>Answer submitted!</p>";
+    }
+  </script>
 </body>
 </html>
