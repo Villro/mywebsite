@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Villro Apps — Custom App & Web Development</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ---------- RESET & GLOBAL ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #f7fafc;
+            color: #1a2b3e;
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ---------- PROFESSIONAL HEADER ---------- */
+        .top-bar {
+            background: #0a1a2b;
+            color: #cbd5e1;
+            font-size: 14px;
+            padding: 8px 0;
+            border-bottom: 1px solid #1e3448;
+        }
+
+        .top-bar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .top-bar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .top-bar a:hover {
+            color: #61dafb;
+        }
+
+        .top-bar i {
+            font-size: 14px;
+            color: #61dafb;
+        }
+
+        header {
+            background: linear-gradient(145deg, #0a1a2b 0%, #1b3b5c 100%);
+            color: white;
+            padding: 22px 0;
+            box-shadow: 0 8px 30px rgba(0, 15, 30, 0.4);
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .logo h1 {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.6px;
+            line-height: 1;
+        }
+
+        .logo span {
+            color: #61dafb;
+            font-weight: 300;
+        }
+
+        .logo .tagline {
+            font-size: 13px;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-top: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        .header-contact {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #ffffff12;
+            backdrop-filter: blur(8px);
+            padding: 12px 26px;
+            border-radius: 60px;
+            border: 1px solid #ffffff1f;
+            transition: background 0.2s;
+        }
+
+        .header-contact:hover {
+            background: #ffffff1f;
+        }
+
+        .header-contact i {
+            font-size: 24px;
+            color: #61dafb;
+        }
+
+        .header-contact .number {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            color: #ffffff;
+            text-decoration: none;
+            line-height: 1.2;
+        }
+
+        .header-contact .number:hover {
+            color: #61dafb;
+        }
+
+        .header-contact small {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.15;
+            background: linear-gradient(135deg, #0a1a2b, #2c5f8a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 18px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #3e4e62;
+            max-width: 720px;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 36px;
+            border-radius: 60px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-primary {
+            background: #1b3b5c;
+            color: white;
+            box-shadow: 0 8px 22px #1b3b5c55;
+        }
+
+        .btn-primary:hover {
+            background: #0f2a40;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px #1b3b5c66;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #1b3b5c;
+            color: #1b3b5c;
+        }
+
+        .btn-outline:hover {
+            background: #1b3b5c;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ---------- SECTION TITLES ---------- */
+        .section-title {
+            font-size: 34px;
+            font-weight: 800;
+            text-align: center;
+            margin: 60px 0 16px;
+            color: #0a1a2b;
+            letter-spacing: -0.5px;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: #4f5f73;
+            max-width: 680px;
+            margin: 0 auto 44px;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        /* ---------- SERVICE CARDS ---------- */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin: 30px 0;
+        }
+
+        .type-card {
+            background: white;
+            padding: 32px 20px;
+            border-radius: 28px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            border: 1px solid #e8eef4;
+            transition: all 0.25s ease;
+        }
+
+        .type-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 44px rgba(0, 0, 0, 0.07);
+            border-color: #b6d4e8;
+        }
+
+        .type-card i {
+            font-size: 38px;
+            color: #1b3b5c;
+            margin-bottom: 18px;
+            background: #e7f0f9;
+            padding: 18px;
+            border-radius: 50%;
+            display: inline-block;
+            width: 76px;
+            height: 76px;
+            line-height: 40px;
+        }
+
+        .type-card h4 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #0a1a2b;
+        }
+
+        .type-card p {
+            font-size: 14px;
+            color: #5b6b7e;
+            line-height: 1.5;
+        }
+
+        /* ---------- PRICING ---------- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+            margin: 30px 0 10px;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 28px;
+            padding: 34px 26px 30px;
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e3eaf1;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.07);
+            border-color: #b6d4e8;
+        }
+
+        .pricing-card .icon {
+            font-size: 30px;
+            color: #1b3b5c;
+            margin-bottom: 14px;
+        }
+
+        .pricing-card h3 {
+            font-size: 23px;
+            font-weight: 700;
+            color: #0a1a2b;
+            margin-bottom: 4px;
+        }
+
+        .pricing-card .price {
+            font-size: 34px;
+            font-weight: 800;
+            color: #1b3b5c;
+            margin: 10px 0 2px;
+            letter-spacing: -0.5px;
+        }
+
+        .pricing-card .price small {
+            font-size: 15px;
+            font-weight: 400;
+            color: #5b6b7e;
+        }
+
+        .pricing-card .badge {
+            background: #e7f0f9;
+            color: #1b3b5c;
+            padding: 5px 16px;
+            border-radius: 60px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 18px;
+            width: fit-content;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin: 16px 0 24px;
+            padding: 0;
+            flex: 1;
+        }
+
+        .pricing-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f4f8;
+            font-size: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-card ul li i {
+            color: #2e7d32;
+            font-size: 14px;
+            width: 18px;
+            flex-shrink: 0;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            padding: 13px 20px;
+            font-size: 15px;
+            background: #1b3b5c;
+            color: white;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 600;
+            justify-content: center;
+        }
+
+        .pricing-card .btn:hover {
+            background: #0f2a40;
+        }
+
+        /* ---------- EXTRA NOTE ---------- */
+        .extra-note {
+            background: #eef6fc;
+            border-left: 6px solid #1b3b5c;
+            padding: 20px 28px;
+            border-radius: 18px;
+            margin: 34px 0 10px;
+            font-size: 16px;
+            color: #1a2b3e;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .extra-note i {
+            font-size: 28px;
+            color: #1b3b5c;
+        }
+
+        /* ---------- PHONE SHOWCASE ---------- */
+        .phone-showcase {
+            background: linear-gradient(145deg, #0a1a2b, #1b3b5c);
+            border-radius: 48px;
+            padding: 56px 32px;
+            margin: 70px 0 50px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 50px rgba(10, 26, 43, 0.35);
+        }
+
+        .phone-showcase h3 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .phone-showcase p {
+            opacity: 0.85;
+            margin-bottom: 28px;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        .phone-number-big {
+            font-size: 54px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #ffffff;
+            background: #ffffff1a;
+            padding: 18px 52px;
+            border-radius: 80px;
+            display: inline-block;
+            backdrop-filter: blur(6px);
+            border: 1px solid #ffffff33;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+
+        .phone-number-big:hover {
+            background: #ffffff2e;
+            color: #61dafb;
+            transform: scale(1.02);
+        }
+
+        .phone-showcase small {
+            display: block;
+            margin-top: 18px;
+            opacity: 0.7;
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+            text-align: center;
+            padding: 48px 0 36px;
+            color: #5b6b7e;
+            font-size: 15px;
+            border-top: 1px solid #e3eaf1;
+            margin-top: 10px;
+        }
+
+        footer strong {
+            color: #0a1a2b;
+            font-weight: 700;
+        }
+
+        /* ---------- FEATURE MODAL ---------- */
+        .feature-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(10, 26, 43, 0.78);
+            backdrop-filter: blur(6px);
+        }
+
+        .feature-modal.is-open {
+            display: flex;
+        }
+
+        .feature-dialog {
+            width: min(100%, 560px);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 30px 26px 26px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .feature-dialog h3 {
+            color: #0a1a2b;
+            font-size: 26px;
+            line-height: 1.2;
+            padding-right: 34px;
+            margin-bottom: 6px;
+        }
+
+        .feature-dialog > p {
+            color: #5b6b7e;
+            font-size: 15px;
+            margin-bottom: 18px;
+        }
+
+        .mandatory-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 22px;
+        }
+
+        .mandatory-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid #edf2f6;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .mandatory-list li i {
+            color: #2e7d32;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .mandatory-list .feature-heading {
+            display: block;
+            padding: 16px 0 6px;
+            border-bottom: 0;
+            color: #1b3b5c;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .mandatory-list .feature-heading:first-child {
+            padding-top: 0;
+        }
+
+        .mandatory-list .feature-heading i {
+            color: #1b3b5c;
+            margin-right: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            width: 40px;
+            height: 40px;
+            border: 0;
+            border-radius: 50%;
+            background: #eef6fc;
+            color: #1b3b5c;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #dcecf8;
+        }
+
+        .feature-dialog .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .feature-dialog .modal-actions .btn {
+            flex: 1;
+            padding: 13px 16px;
+            font-size: 15px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 760px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .top-bar {
+                font-size: 12px;
+                padding: 6px 0;
+            }
+
+            .top-bar .container {
+                justify-content: center;
+                text-align: center;
+            }
+
+            header {
+                padding: 18px 0 20px;
+            }
+
+            .header-flex {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 14px;
+            }
+
+            .logo {
+                text-align: center;
+            }
+
+            .logo h1 {
+                font-size: 26px;
+            }
+
+            .header-contact {
+                justify-content: center;
+                padding: 12px 18px;
+                border-radius: 20px;
+            }
+
+            .header-contact .number {
+                font-size: 19px;
+            }
+
+            .hero {
+                padding: 38px 0 16px;
+            }
+
+            .hero h2 {
+                font-size: clamp(28px, 7.5vw, 36px);
+                letter-spacing: -0.5px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                padding: 14px 20px;
+            }
+
+            .section-title {
+                font-size: 27px;
+                margin: 42px 0 12px;
+            }
+
+            .section-sub {
+                font-size: 15px;
+                margin-bottom: 28px;
+            }
+
+            .grid-4,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin: 20px 0;
+            }
+
+            .type-card {
+                padding: 26px 18px;
+                border-radius: 22px;
+            }
+
+            .type-card i {
+                font-size: 30px;
+                width: 64px;
+                height: 64px;
+                line-height: 32px;
+                padding: 14px;
+            }
+
+            .pricing-card {
+                padding: 26px 20px 24px;
+                border-radius: 22px;
+            }
+
+            .pricing-card h3 {
+                font-size: 21px;
+            }
+
+            .pricing-card .price {
+                font-size: 28px;
+            }
+
+            .pricing-card ul li {
+                min-height: 36px;
+                font-size: 14px;
+            }
+
+            .pricing-card .btn {
+                min-height: 46px;
+                padding: 13px 20px;
+            }
+
+            .extra-note {
+                padding: 16px;
+                margin: 26px 0 8px;
+                font-size: 14px;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .extra-note i {
+                font-size: 22px;
+            }
+
+            .phone-showcase {
+                border-radius: 28px;
+                padding: 36px 16px;
+                margin: 44px 0 32px;
+            }
+
+            .phone-showcase h3 {
+                font-size: 25px;
+            }
+
+            .phone-showcase p {
+                font-size: 15px;
+            }
+
+            .phone-number-big {
+                width: 100%;
+                font-size: clamp(24px, 7vw, 34px);
+                padding: 16px 10px;
+                letter-spacing: 1.5px;
+            }
+
+            footer {
+                padding: 34px 0 28px;
+                font-size: 14px;
+            }
+
+            .feature-dialog {
+                padding: 24px 18px 20px;
+                border-radius: 22px;
+            }
+
+            .feature-dialog h3 {
+                font-size: 22px;
+            }
+
+            .feature-dialog .modal-actions {
+                flex-direction: column;
+            }
+
+            .modal-close {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+                top: 14px;
+                right: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <span><i class="fas fa-clock"></i> Mon–Sat, 9 AM – 8 PM</span>
+            <a href="tel:+919876543210"><i class="fas fa-phone-alt"></i> +91 98765 43210</a>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container header-flex">
+            <div class="logo">
+                <h1>Service <span>Provider</span></h1>
+                <div class="tagline">Custom App & Web Development</div>
+            </div>
+            <div class="header-contact">
+                <i class="fas fa-phone-alt"></i>
+                <div>
+                    <a href="tel:+919876543210" class="number">+91 98765 43210</a>
+                    <small>Call or WhatsApp for instant quote</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero container">
+        <h2>Custom Apps & Websites<br>That Grow Your Business</h2>
+        <p>We build high‑quality Android, iOS, and web solutions tailored for E‑commerce, Teaching, Communication, and Reservation platforms.</p>
+        <div class="hero-buttons">
+            <a href="#pricing" class="btn btn-primary"><i class="fas fa-tag"></i> View Pricing</a>
+            <a href="tel:+919876543210" class="btn btn-outline"><i class="fas fa-phone-alt"></i> Talk to us</a>
+        </div>
+    </section>
+
+    <!-- APP TYPES -->
+    <div class="container">
+        <h3 class="section-title">What We Build</h3>
+        <p class="section-sub">Four specialised categories — each with custom features, modern UI, and scalable backend.</p>
+
+        <div class="grid-4">
+            <div class="type-card">
+                <i class="fas fa-shopping-cart"></i>
+                <h4>E‑commerce</h4>
+                <p>Product catalogs, cart, payments, order tracking, and admin dashboard.</p>
+            </div>
+            <div class="type-card">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h4>Teaching</h4>
+                <p>Live classes, video lessons, quizzes, assignments, and student progress.</p>
+            </div>
+            <div class="type-card">
+                <i class="fas fa-comments"></i>
+                <h4>Communication</h4>
+                <p>Chat, voice/video calls, group messaging, and real‑time notifications.</p>
+            </div>
+            <div class="type-card">
+                <i class="fas fa-calendar-check"></i>
+                <h4>Reservation</h4>
+                <p>Table, room, or service booking with calendar sync and reminders.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="container" id="pricing">
+        <h3 class="section-title">Transparent Pricing</h3>
+        <p class="section-sub">One‑time development cost. No hidden fees. Custom features quoted separately.</p>
+
+        <div class="pricing-grid">
+
+            <!-- Android -->
+            <div class="pricing-card">
+                <div class="icon"><i class="fab fa-android"></i></div>
+                <h3>Android App</h3>
+                <div class="price">₹18,000 – ₹20,000</div>
+                <div class="badge">One‑time</div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Full source code</li>
+                    <li><i class="fas fa-check-circle"></i> Play Store upload</li>
+                    <li><i class="fas fa-check-circle"></i> Admin panel included</li>
+                    <li><i class="fas fa-check-circle"></i> 30‑day support</li>
+                    <li><i class="fas fa-check-circle"></i> Firebase backend</li>
+                </ul>
+                <a href="#" class="btn get-started" data-plan="Android App" data-features="Customer App::Login / Register|Home|Categories|Product Listing|Product Details|Search|Filter / Sort|Wishlist|Cart|Address|Checkout|Payment Options|Order Confirmation|My Orders|Order Details|Profile|Notifications||Admin Dashboard::Dashboard overview|Products|Categories|Customers|Orders|Payment status|Coupons|Basic reports||Advanced / Paid Features::Multi-vendor|GST invoice|Delivery tracking|Inventory|Loyalty|Referral|Wallet|Reviews|Flash sale|Subscription|WhatsApp / SMS|AI recommendations|Analytics|Multi-language / currency||Visual App Screen Templates::Login screen|Home / category screen|Product details|Wishlist|Add to cart|Checkout|Payment page|Order details|Admin dashboard||Included Delivery::Full source code|Play Store upload|Firebase backend|30-day support">Get Started</a>
+            </div>
+
+            <!-- iOS -->
+            <div class="pricing-card">
+                <div class="icon"><i class="fab fa-apple"></i></div>
+                <h3>iOS App</h3>
+                <div class="price">₹18,000 – ₹20,000</div>
+                <div class="badge">One‑time</div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Full source code</li>
+                    <li><i class="fas fa-check-circle"></i> App Store upload</li>
+                    <li><i class="fas fa-check-circle"></i> Admin panel included</li>
+                    <li><i class="fas fa-check-circle"></i> 30‑day support</li>
+                    <li><i class="fas fa-check-circle"></i> Firebase backend</li>
+                </ul>
+                <a href="#" class="btn get-started" data-plan="iOS App" data-features="Customer App::Login / Register|Home|Categories|Product Listing|Product Details|Search|Filter / Sort|Wishlist|Cart|Address|Checkout|Payment Options|Order Confirmation|My Orders|Order Details|Profile|Notifications||Admin Dashboard::Dashboard overview|Products|Categories|Customers|Orders|Payment status|Coupons|Basic reports||Advanced / Paid Features::Multi-vendor|GST invoice|Delivery tracking|Inventory|Loyalty|Referral|Wallet|Reviews|Flash sale|Subscription|WhatsApp / SMS|AI recommendations|Analytics|Multi-language / currency||Visual App Screen Templates::Login screen|Home / category screen|Product details|Wishlist|Add to cart|Checkout|Payment page|Order details|Admin dashboard||Included Delivery::Full source code|App Store upload|Firebase backend|30-day support|Responsive design|30-day support">Get Started</a>
+            </div>
+
+            <!-- Both -->
+            <div class="pricing-card" style="border-color: #1b3b5c; border-width: 2px;">
+                <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Android + iOS</h3>
+                <div class="price">₹20,000 – ₹24,000</div>
+                <div class="badge" style="background: #1b3b5c; color: white;">Best Value</div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Both platforms</li>
+                    <li><i class="fas fa-check-circle"></i> Single codebase (Flutter/React Native)</li>
+                    <li><i class="fas fa-check-circle"></i> Admin panel included</li>
+                    <li><i class="fas fa-check-circle"></i> 60‑day support</li>
+                    <li><i class="fas fa-check-circle"></i> Firebase backend</li>
+                </ul>
+                <a href="#" class="btn get-started" data-plan="Android + iOS" data-features="Customer App::Login / Register|Home|Categories|Product Listing|Product Details|Search|Filter / Sort|Wishlist|Cart|Address|Checkout|Payment Options|Order Confirmation|My Orders|Order Details|Profile|Notifications||Admin Dashboard::Dashboard overview|Products|Categories|Customers|Orders|Payment status|Coupons|Basic reports||Advanced / Paid Features::Multi-vendor|GST invoice|Delivery tracking|Inventory|Loyalty|Referral|Wallet|Reviews|Flash sale|Subscription|WhatsApp / SMS|AI recommendations|Analytics|Multi-language / currency||Visual App Screen Templates::Login screen|Home / category screen|Product details|Wishlist|Add to cart|Checkout|Payment page|Order details|Admin dashboard||Included Delivery::Both platforms|Single codebase (Flutter / React Native)|Firebase backend|60-day support">Get Started</a>
+            </div>
+
+            <!-- Website -->
+            <div class="pricing-card">
+                <div class="icon"><i class="fas fa-globe"></i></div>
+                <h3>Website</h3>
+                <div class="price">₹15,000 – ₹18,000</div>
+                <div class="badge">One‑time</div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Responsive design</li>
+                    <li><i class="fas fa-check-circle"></i> Admin dashboard</li>
+                    <li><i class="fas fa-check-circle"></i> SEO friendly</li>
+                    <li><i class="fas fa-check-circle"></i> 30‑day support</li>
+                    <li><i class="fas fa-check-circle"></i> Hosting setup</li>
+                </ul>
+                <a href="#" class="btn get-started" data-plan="Website" data-features="Customer App::Login / Register|Home|Categories|Product Listing|Product Details|Search|Filter / Sort|Wishlist|Cart|Address|Checkout|Payment Options|Order Confirmation|My Orders|Order Details|Profile|Notifications||Admin Dashboard::Dashboard overview|Products|Categories|Customers|Orders|Payment status|Coupons|Basic reports||Advanced / Paid Features::Multi-vendor|GST invoice|Delivery tracking|Inventory|Loyalty|Referral|Wallet|Reviews|Flash sale|Subscription|WhatsApp / SMS|AI recommendations|Analytics|Multi-language / currency||Visual App Screen Templates::Login screen|Home / category screen|Product details|Wishlist|Add to cart|Checkout|Payment page|Order details|Admin dashboard||Included Delivery::Responsive design|Admin dashboard|SEO-friendly setup|Hosting setup|30-day support">Get Started</a>
+            </div>
+
+        </div>
+
+        <div class="extra-note">
+            <i class="fas fa-puzzle-piece"></i>
+            <span><strong>Extra features</strong> (payment gateway, live chat, multi‑language, analytics, etc.) are charged separately based on complexity.</span>
+        </div>
+    </div>
+
+    <!-- FEATURE MODAL -->
+    <div class="feature-modal" id="featureModal" role="dialog" aria-modal="true" aria-labelledby="featureTitle">
+        <div class="feature-dialog">
+            <button class="modal-close" type="button" aria-label="Close" data-close-modal>
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 id="featureTitle">Included features</h3>
+            <p id="featureDescription">Review the included features, available screen templates, and optional paid upgrades for your selected package.</p>
+            <ul class="mandatory-list" id="mandatoryList"></ul>
+            <div class="modal-actions">
+                <a href="tel:+919876543210" class="btn btn-primary"><i class="fas fa-phone-alt"></i> Call to continue</a>
+                <button type="button" class="btn btn-outline" data-close-modal>Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHONE SHOWCASE -->
+    <div class="container">
+        <div class="phone-showcase">
+            <h3>Ready to build your app?</h3>
+            <p>Call or WhatsApp us — we reply within 30 minutes.</p>
+            <a href="tel:+919876543210" class="phone-number-big">+91 98765 43210</a>
+            <small>Available Mon–Sat, 9 AM – 8 PM</small>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p><strong>VillroApps</strong> — Custom App & Web Development</p>
+            <p style="margin-top: 8px; font-size: 14px;">© 2026 VillroApps. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const featureModal = document.getElementById('featureModal');
+        const featureTitle = document.getElementById('featureTitle');
+        const mandatoryList = document.getElementById('mandatoryList');
+
+        document.querySelectorAll('.get-started').forEach((button) => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                featureTitle.textContent = `${button.dataset.plan} includes`;
+                mandatoryList.innerHTML = button.dataset.features
+                    .split('||')
+                    .map((section) => {
+                        const [heading, features] = section.split('::');
+                        const featureItems = features.split('|')
+                            .map((feature) => `<li><i class="fas fa-check-circle"></i><span>${feature}</span></li>`)
+                            .join('');
+                        return `<li class="feature-heading"><i class="fas fa-layer-group"></i>${heading}</li>${featureItems}`;
+                    })
+                    .join('');
+                featureModal.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.querySelectorAll('[data-close-modal]').forEach((button) => {
+            button.addEventListener('click', closeFeatureModal);
+        });
+
+        featureModal.addEventListener('click', (event) => {
+            if (event.target === featureModal) closeFeatureModal();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeFeatureModal();
+        });
+
+        function closeFeatureModal() {
+            featureModal.classList.remove('is-open');
+            document.body.style.overflow = '';
+        }
+    </script>
+</body>
+</html>
